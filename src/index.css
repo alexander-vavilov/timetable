@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+input,
+button {
+  @apply outline-none;
+}
+input[type='time'] {
+  @apply relative;
+}
+input[type='time']::-webkit-calendar-picker-indicator {
+  @apply absolute right-0 top-0 block h-full w-full cursor-pointer bg-transparent opacity-0;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
