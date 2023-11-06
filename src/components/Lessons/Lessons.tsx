@@ -6,7 +6,7 @@ import LessonsAddButton from './LessonsAddButton'
 import { ScheduleContext } from '../../contexts/ScheduleContext'
 
 interface ILessons {
-	items: (ILesson & { id: string })[]
+	items: ILesson[]
 	date: Date
 }
 

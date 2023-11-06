@@ -16,10 +16,11 @@ export interface ILesson {
 		[key: string]: string
 	}
 	weekDay: number
+	id: string
 }
 
 export interface ILessons {
-	[key: string]: ILesson
+	[id: string]: Omit<ILesson, 'id'>
 }
 
 export type handleSubmitFunction = {
