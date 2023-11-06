@@ -1,41 +1,31 @@
 import { FC, useContext } from 'react'
-import { getWeekDayByDate } from '../../utils'
-import { lessonsType } from '../../types'
-import { ScheduleContextType } from '../../types/contexts'
+import { IScheduleContext } from '../../types/contexts'
 import { ScheduleContext } from '../../contexts/ScheduleContext'
 import Lessons from '../Lessons/Lessons'
-import { format, isSameDay } from 'date-fns'
-import { ru } from 'date-fns/locale'
-import clsx from 'clsx'
+import { getDay } from 'date-fns'
+import ScheduleDayHeading from './ScheduleDayHeading'
 
-const ScheduleDay: FC<{ dayDate: Date }> = ({ dayDate }) => {
-  const { lessons, isEditMode, date } = useContext(
-    ScheduleContext
-  ) as ScheduleContextType
+const ScheduleDay: FC<{ date: Date }> = ({ date }) => {
+	const { lessons, isEditMode } = useContext(
+		ScheduleContext
+	) as IScheduleContext
 
-  const dateString = format(dayDate, 'eeee, dd MMM', {
-    locale: ru
-  })
-  const isCurrentDay = isSameDay(date, dayDate)
-  const weekDay = getWeekDayByDate(dayDate) as keyof lessonsType
-  const dayLessons = lessons[weekDay]
+	const lessonsArr = Object.keys(lessons).map(key => ({
+		...lessons[key],
+		id: key,
+	}))
 
-  if (!dayLessons?.length && !isEditMode) return
-  return (
-    <div key={dateString}>
-      <h2
-        className={clsx(
-          'sticky top-0 px-2 py-1 capitalize backdrop-blur-md transition-background',
-          isCurrentDay
-            ? 'bg-green-700 text-white'
-            : 'bg-gray-200/50 dark:bg-neutral-950/50'
-        )}
-      >
-        {dateString}
-      </h2>
-      <Lessons date={dayDate} items={dayLessons} />
-    </div>
-  )
+	const dayLessons = lessonsArr.filter(({ weekDay }) => {
+		return weekDay === getDay(date)
+	})
+
+	if (!dayLessons?.length && !isEditMode) return
+	return (
+		<div className='flex flex-col'>
+			<ScheduleDayHeading date={date} />
+			<Lessons date={date} items={dayLessons} />
+		</div>
+	)
 }
 
 export default ScheduleDay

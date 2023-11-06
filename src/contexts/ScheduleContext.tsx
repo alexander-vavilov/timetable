@@ -2,48 +2,50 @@ import { FC, ReactNode, createContext, useEffect, useState } from 'react'
 import { doc, onSnapshot } from 'firebase/firestore'
 import { useParams } from 'react-router-dom'
 import { db } from '../../firebase'
-import { lessonsType } from '../types'
-import { ScheduleContextType } from '../types/contexts'
-import { lessonsObj } from '../consts'
+import { ILessons } from '../types'
+import { IScheduleContext } from '../types/contexts'
 
-export const ScheduleContext = createContext<ScheduleContextType | null>(null)
+export const ScheduleContext = createContext<IScheduleContext | null>(null)
 
 export const ScheduleContextProvider: FC<{ children: ReactNode }> = ({
-  children
+	children,
 }) => {
-  const [lessons, setLessons] = useState<lessonsType>(lessonsObj)
-  const [isEditMode, setIsEditMode] = useState(false)
-  const [date, setDate] = useState(new Date())
-  const [isLoading, setIsLoading] = useState(true)
+	const [lessons, setLessons] = useState<ILessons>({})
+	const [isEditMode, setIsEditMode] = useState(false)
+	const [date, setDate] = useState(new Date())
+	const [isLoading, setIsLoading] = useState(true)
 
-  const { scheduleId } = useParams()
+	const { scheduleId } = useParams()
 
-  useEffect(() => {
-    if (!scheduleId) return
-    setIsLoading(true)
+	useEffect(() => {
+		if (!scheduleId) return
+		setIsLoading(true)
 
-    const docRef = doc(db, 'schedules', scheduleId)
-    const unsub = onSnapshot(docRef, (doc) => {
-      setLessons({ ...lessonsObj, ...(doc.data() as lessonsType) })
-      setIsLoading(false)
-    })
+		const docRef = doc(db, 'schedules', scheduleId)
+		const unsub = onSnapshot(docRef, doc => {
+			if (doc.exists()) {
+				setLessons(doc.data())
+			} else {
+				setLessons({})
+			}
+			setIsLoading(false)
+		})
 
-    return () => unsub()
-  }, [scheduleId])
+		return () => unsub()
+	}, [scheduleId])
 
-  const value = {
-    lessons,
-    setLessons,
-    isLoading,
-    isEditMode,
-    setIsEditMode,
-    date,
-    setDate
-  }
+	const value = {
+		lessons,
+		isLoading,
+		isEditMode,
+		setIsEditMode,
+		date,
+		setDate,
+	}
 
-  return (
-    <ScheduleContext.Provider value={value}>
-      {children}
-    </ScheduleContext.Provider>
-  )
+	return (
+		<ScheduleContext.Provider value={value}>
+			{children}
+		</ScheduleContext.Provider>
+	)
 }

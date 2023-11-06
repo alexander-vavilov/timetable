@@ -1,26 +1,25 @@
 import { Dispatch, SetStateAction } from 'react'
-import { lessonsType } from '../types'
+import { ILessons } from '../types'
 
 export interface ICurrentUser {
-  uid: string
+	uid: string
 }
-export type UserContextType = {
-  currentUser: ICurrentUser | null
-  setCurrentUser: React.Dispatch<React.SetStateAction<ICurrentUser | null>>
-}
-
-export type ScheduleContextType = {
-  lessons: lessonsType
-  setLessons: Dispatch<SetStateAction<lessonsType>>
-  isLoading: boolean
-  isEditMode: boolean
-  setIsEditMode: Dispatch<SetStateAction<boolean>>
-  date: Date
-  setDate: Dispatch<SetStateAction<Date>>
+export interface IUserContext {
+	currentUser: ICurrentUser | null
+	setCurrentUser: React.Dispatch<React.SetStateAction<ICurrentUser | null>>
 }
 
-export type themeType = 'dark' | 'light'
-export type ThemeContextType = {
-  theme: themeType
-  switchTheme: () => void
+export interface IScheduleContext {
+	lessons: ILessons
+	isLoading: boolean
+	isEditMode: boolean
+	setIsEditMode: Dispatch<SetStateAction<boolean>>
+	date: Date
+	setDate: Dispatch<SetStateAction<Date>>
+}
+
+export type ITheme = 'dark' | 'light'
+export type IThemeContext = {
+	theme: ITheme
+	switchTheme: () => void
 }

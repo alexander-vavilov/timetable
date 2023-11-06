@@ -1,35 +1,35 @@
 import { createContext, FC, ReactNode, useState } from 'react'
-import { ThemeContextType, themeType } from '../types/contexts'
+import { IThemeContext, ITheme } from '../types/contexts'
 
-export const ThemeContext = createContext<ThemeContextType | null>(null)
+export const ThemeContext = createContext<IThemeContext | null>(null)
 
 const getTheme = () => {
-  const storedTheme = window.localStorage.getItem('theme')
-  const htmlElement = document.documentElement
+	const storedTheme = window.localStorage.getItem('theme')
+	const htmlElement = document.documentElement
 
-  if (storedTheme === 'dark' || storedTheme === 'light') {
-    htmlElement.setAttribute('data-theme', storedTheme)
-    return storedTheme
-  }
+	if (storedTheme === 'dark' || storedTheme === 'light') {
+		htmlElement.setAttribute('data-theme', storedTheme)
+		return storedTheme
+	}
 
-  return 'dark'
+	return 'dark'
 }
 
 export const ThemeContextProvider: FC<{ children: ReactNode }> = ({
-  children
+	children,
 }) => {
-  const [theme, setTheme] = useState<themeType>(getTheme())
+	const [theme, setTheme] = useState<ITheme>(getTheme())
 
-  const switchTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light'
+	const switchTheme = () => {
+		const newTheme = theme === 'light' ? 'dark' : 'light'
 
-    setTheme(newTheme)
-    window.localStorage.setItem('theme', newTheme)
-  }
+		setTheme(newTheme)
+		window.localStorage.setItem('theme', newTheme)
+	}
 
-  return (
-    <ThemeContext.Provider value={{ theme, switchTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  )
+	return (
+		<ThemeContext.Provider value={{ theme, switchTheme }}>
+			{children}
+		</ThemeContext.Provider>
+	)
 }

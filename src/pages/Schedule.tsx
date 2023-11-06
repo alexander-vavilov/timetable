@@ -1,7 +1,6 @@
 import { FC, useContext, useMemo } from 'react'
 import { startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns'
-import { ScheduleContextType, UserContextType } from '../types/contexts'
-import { isContainsNonEmptyArray } from '../utils'
+import { IScheduleContext, IUserContext } from '../types/contexts'
 import { ScheduleContext } from '../contexts/ScheduleContext'
 import ScheduleEmptyMessage from '../components/Schedule/ScheduleEmptyMessage'
 import ScheduleDays from '../components/Schedule/ScheduleDays'
@@ -12,49 +11,59 @@ import ScheduleNotExistMessage from '../components/Schedule/ScheduleNotExistMess
 import LessonsItemSkeleton from '../components/Lessons/LessonsItemSkeleton'
 
 const Schedule: FC = () => {
-  const { lessons, isLoading, isEditMode, date } = useContext(
-    ScheduleContext
-  ) as ScheduleContextType
-  const { currentUser } = useContext(UserContext) as UserContextType
-  const { scheduleId } = useParams()
+	const { lessons, isLoading, isEditMode, date } = useContext(
+		ScheduleContext
+	) as IScheduleContext
+	const { currentUser } = useContext(UserContext) as IUserContext
+	const { scheduleId } = useParams()
 
-  const weekStart = startOfWeek(date, { weekStartsOn: 1 })
-  const weekEnd = endOfWeek(date, { weekStartsOn: 1 })
-  const weekDays = useMemo(
-    () => eachDayOfInterval({ start: weekStart, end: weekEnd }),
-    [date]
-  )
+	const isOwner = currentUser?.uid === scheduleId
 
-  return (
-    <div className='flex h-full flex-col overflow-hidden bg-gray-200 text-black transition-colors dark:bg-neutral-950 dark:text-white'>
-      <div className='flex flex-auto flex-col overflow-y-auto overflow-x-hidden pb-6'>
-        <div className='flex justify-center py-4 sm:justify-end sm:pr-4'>
-          <ScheduleTabs />
-        </div>
-        {isLoading ? (
-          <div className='mt-6 flex flex-col divide-y divide-gray-300 dark:divide-neutral-800'>
-            {Array.from({ length: 5 }).map((_, index) => (
-              <LessonsItemSkeleton key={index} />
-            ))}
-          </div>
-        ) : (
-          /* className='animate-slide-in' */
-          <div className='flex-auto'>
-            <ScheduleDays days={weekDays} />
-            {!isContainsNonEmptyArray(lessons) && !isEditMode && (
-              <div className='flex h-full w-full flex-auto items-center justify-center'>
-                {currentUser?.uid === scheduleId ? (
-                  <ScheduleEmptyMessage />
-                ) : (
-                  <ScheduleNotExistMessage />
-                )}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
-  )
+	const weekStart = startOfWeek(date, { weekStartsOn: 1 })
+	const weekEnd = endOfWeek(date, { weekStartsOn: 1 })
+	const weekDays = useMemo(() => {
+		return eachDayOfInterval({ start: weekStart, end: weekEnd })
+	}, [date])
+
+	return (
+		<div className='flex h-full flex-col overflow-hidden bg-gray-200 text-black transition-colors dark:bg-neutral-950 dark:text-white'>
+			<div className='flex flex-auto flex-col overflow-y-auto overflow-x-hidden pb-6'>
+				<div className='flex justify-center py-4 sm:justify-end sm:pr-4'>
+					<ScheduleTabs />
+				</div>
+				{!isOwner && (
+					<span className='text-neutral-400 text-xs'>
+						Расписание доступно только в режиме просмотра
+					</span>
+				)}
+				{isLoading ? (
+					<div className='flex flex-col divide-y divide-gray-300 dark:divide-neutral-800'>
+						<div className='p-2'>
+							<div className='skeleton h-2 w-16' />
+						</div>
+						{Array.from({ length: 5 }).map((_, index) => (
+							<LessonsItemSkeleton key={index} />
+						))}
+					</div>
+				) : (
+					/* className='animate-slide-in' */
+					<div className='flex-auto'>
+						{Object.keys(lessons).length === 0 && !isEditMode ? (
+							<div className='flex h-full w-full flex-auto items-center justify-center'>
+								{currentUser?.uid === scheduleId ? (
+									<ScheduleEmptyMessage />
+								) : (
+									<ScheduleNotExistMessage />
+								)}
+							</div>
+						) : (
+							<ScheduleDays days={weekDays} />
+						)}
+					</div>
+				)}
+			</div>
+		</div>
+	)
 }
 
 export default Schedule
