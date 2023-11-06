@@ -10,8 +10,8 @@ import { nanoid } from 'nanoid'
 import isEqual from 'lodash.isequal'
 import Input from '../Input'
 import { toast } from 'sonner'
-import LessonTimeInputs from '../Lesson/LessonTimeInputs'
-import LessonFooter from '../Lesson/LessonFooter'
+import LessonTimeInputs from './LessonTimeInputs'
+import LessonFooter from './LessonFooter'
 
 const LessonContent: FC = () => {
 	const { currentUser } = useContext(UserContext) as IUserContext

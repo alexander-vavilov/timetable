@@ -3,8 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Modal from '../Modal'
 import { IScheduleContext } from '../../types/contexts'
 import { ScheduleContext } from '../../contexts/ScheduleContext'
-import LessonContent from '../Lessons/LessonContent'
-import LessonSkeleton from '../Lessons/LessonSkeleton'
+import LessonContent from '../Lesson/LessonContent'
+import LessonSkeleton from '../Lesson/LessonSkeleton'
 
 const LessonModal: FC = () => {
 	const { scheduleId } = useParams()
