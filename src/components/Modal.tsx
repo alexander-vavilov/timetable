@@ -3,9 +3,9 @@ import useKeyDown from '../hooks/useKeyDown'
 import useClickAway from '../hooks/useClickAway'
 import CloseButton from './CloseButton'
 import Overlay from './Overlay'
-import cn from 'classnames'
 import { IModal } from '../types'
 import { createPortal } from 'react-dom'
+import { cn } from '../utils'
 
 const defaultStyles =
 	'fixed z-40 flex w-full flex-col overflow-hidden bg-white text-black dark:bg-neutral-800 dark:text-white'

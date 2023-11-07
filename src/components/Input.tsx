@@ -1,6 +1,6 @@
 import { FC, ChangeEvent } from 'react'
 import { InputType } from '../types'
-import cn from 'classnames'
+import { cn } from '../utils'
 
 const defaultStyles =
 	'peer w-full border-gray-200 bg-transparent px-2 py-1 transition-colors duration-300 focus:border-gray-500 disabled:text-white dark:border-neutral-500 focus:dark:border-neutral-200'

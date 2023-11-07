@@ -4,7 +4,7 @@ import MenuButton from './MenuButton'
 import useKeyDown from '../../hooks/useKeyDown'
 import MenuItems from './MenuItems'
 import Overlay from '../Overlay'
-import cn from 'classnames'
+import { cn } from '../../utils'
 
 const Menu: FC = () => {
 	const [isOpen, setIsOpen] = useState(false)

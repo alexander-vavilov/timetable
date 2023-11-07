@@ -1,5 +1,5 @@
-import cn from 'classnames'
 import { FC } from 'react'
+import { cn } from '../../utils'
 
 interface IMenuButton {
 	onClick: () => void

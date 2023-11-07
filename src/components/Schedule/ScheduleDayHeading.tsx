@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { format, isSameDay } from 'date-fns'
-import cn from 'classnames'
 import { ru } from 'date-fns/locale'
+import { cn } from '../../utils'
 
 interface IScheduleDayHeading {
 	date: Date

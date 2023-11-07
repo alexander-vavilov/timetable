@@ -1,5 +1,5 @@
-import cn from 'classnames'
 import { FC } from 'react'
+import { cn } from '../utils'
 
 const Overlay: FC<{ className?: string }> = ({ className }) => {
 	return (

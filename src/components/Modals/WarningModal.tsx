@@ -1,10 +1,10 @@
 import { FC } from 'react'
 import Modal from '../Modal'
 import { IModal } from '../../types'
-import cn from 'classnames'
 import Button from '../Button'
 import { ReactSVG } from 'react-svg'
 import CatSvg from '../../assets/angry-cat.svg'
+import { cn } from '../../utils'
 
 interface IWarningModal extends IModal {
 	confirmHandler: () => void
@@ -18,7 +18,7 @@ const WarningModal: FC<IWarningModal> = ({ confirmHandler, ...props }) => {
 
 	return (
 		<Modal
-			className={cn('!max-w-[300px] sm:!max-w-sm', props.className)}
+			className={cn('max-w-[300px] sm:max-w-sm', props.className)}
 			variant='mobileCompact'
 			{...props}
 		>

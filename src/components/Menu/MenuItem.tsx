@@ -1,7 +1,7 @@
-import cn from 'classnames'
 import { FC, useState } from 'react'
 import { IconType } from 'react-icons'
 import WarningModal from '../Modals/WarningModal'
+import { cn } from '../../utils'
 
 interface IMenuItem {
 	label: string

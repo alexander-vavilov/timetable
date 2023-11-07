@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes, FC, ReactNode } from 'react'
 import Spinner from './Spinner'
-import cn from 'classnames'
+import { cn } from '../utils'
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
 	children: ReactNode
