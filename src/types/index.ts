@@ -23,11 +23,11 @@ export interface ILessons {
 	[id: string]: Omit<ILesson, 'id'>
 }
 
-export type handleSubmitFunction = {
-	email: string
-	password: string
+export type handleSubmitFn = (
+	email: string,
+	password: string,
 	setIsLoading: Dispatch<SetStateAction<boolean>>
-}
+) => void
 
 export type InputType = {
 	type?: HTMLInputTypeAttribute

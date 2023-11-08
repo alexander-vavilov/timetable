@@ -2,28 +2,28 @@ import { FC } from 'react'
 import Form from '../components/Form/Form'
 import { auth } from '../../firebase'
 import { signInWithEmailAndPassword } from 'firebase/auth'
-import { handleSubmitFunction } from '../types'
 import { toast } from 'sonner'
+import { handleSubmitFn } from '../types'
 
 const Login: FC = () => {
-  const handleSubmit = async ({
-    email,
-    password,
-    setIsLoading
-  }: handleSubmitFunction) => {
-    setIsLoading(true)
+	const handleSubmit: handleSubmitFn = async (
+		email,
+		password,
+		setIsLoading
+	) => {
+		setIsLoading(true)
 
-    try {
-      const { user } = await signInWithEmailAndPassword(auth, email, password)
-      return user
-    } catch (error) {
-      toast.error('Что-то пошло не так...')
-    } finally {
-      setIsLoading(false)
-    }
-  }
+		try {
+			const { user } = await signInWithEmailAndPassword(auth, email, password)
+			return user
+		} catch (error) {
+			toast.error('Что-то пошло не так...')
+		} finally {
+			setIsLoading(false)
+		}
+	}
 
-  return <Form title='Войти' type='login' handleSubmit={handleSubmit} />
+	return <Form title='Войти' type='login' handleSubmit={handleSubmit} />
 }
 
 export default Login

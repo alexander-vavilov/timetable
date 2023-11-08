@@ -2,15 +2,15 @@ import { FC } from 'react'
 import Form from '../components/Form/Form'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth } from '../../firebase'
-import { handleSubmitFunction } from '../types'
+import { handleSubmitFn } from '../types'
 import { toast } from 'sonner'
 
 const Register: FC = () => {
-	const handleSubmit = async ({
+	const handleSubmit: handleSubmitFn = async (
 		email,
 		password,
-		setIsLoading,
-	}: handleSubmitFunction) => {
+		setIsLoading
+	) => {
 		setIsLoading(true)
 
 		try {

@@ -2,15 +2,10 @@ import { FC, FormEvent, useContext, useState } from 'react'
 import Input from '../Input'
 import Button from '../Button'
 import { UserContext } from '../../contexts/UserContext'
-import { handleSubmitFunction } from '../../types'
+import { handleSubmitFn } from '../../types'
 import { IUserContext } from '../../types/contexts'
 import { Navigate } from 'react-router-dom'
-import {
-	UserCredential,
-	signInAnonymously,
-	signInWithPopup,
-} from 'firebase/auth'
-import { auth, provider } from '../../../firebase'
+import { UserCredential } from 'firebase/auth'
 import FormLoading from './FormLoading'
 import FormGoogleButton from './FormGoogleButton'
 import FormAnonymousButton from './FormAnonymousButton'
@@ -22,11 +17,7 @@ import { toast } from 'sonner'
 interface IForm {
 	title: string
 	type: 'register' | 'login'
-	handleSubmit: ({
-		email,
-		password,
-		setIsLoading,
-	}: handleSubmitFunction) => void
+	handleSubmit: handleSubmitFn
 }
 
 const Form: FC<IForm> = ({ title, type, handleSubmit }) => {
@@ -38,7 +29,7 @@ const Form: FC<IForm> = ({ title, type, handleSubmit }) => {
 
 	const onSubmit = async (e: FormEvent) => {
 		e.preventDefault()
-		handleSubmit({ email, password, setIsLoading })
+		handleSubmit(email, password, setIsLoading)
 	}
 	const handleAuth = async (callback: () => Promise<UserCredential>) => {
 		setIsLoading(true)
@@ -50,12 +41,6 @@ const Form: FC<IForm> = ({ title, type, handleSubmit }) => {
 		} finally {
 			setIsLoading(false)
 		}
-	}
-	const handleSignInAnonymously = async () => {
-		handleAuth(() => signInAnonymously(auth))
-	}
-	const handleSignInWithGoogle = async () => {
-		handleAuth(() => signInWithPopup(auth, provider))
 	}
 
 	if (currentUser) return <Navigate to='/' />
@@ -78,14 +63,14 @@ const Form: FC<IForm> = ({ title, type, handleSubmit }) => {
 						onChange={e => setPassword(e.target.value)}
 						placeholder='пароль'
 					/>
-					<Button type='submit' className='text-white'>
+					<Button type='submit' disabled={isLoading} className='text-white'>
 						{title}
 					</Button>
 				</form>
 				<FormDivider />
 				<div className='flex flex-col gap-2'>
-					<FormGoogleButton onClick={handleSignInWithGoogle} />
-					<FormAnonymousButton onClick={handleSignInAnonymously} />
+					<FormGoogleButton handleAuth={handleAuth} disabled={isLoading} />
+					<FormAnonymousButton handleAuth={handleAuth} disabled={isLoading} />
 				</div>
 				<div className='mt-4 border-t border-neutral-400/70 pt-4 text-center'>
 					<FormLink type={type} />

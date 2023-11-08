@@ -13,6 +13,7 @@ const styles = {
 
 const Input: FC<InputType> = ({
 	styleVariant = 'outline',
+	value,
 	placeholder,
 	className,
 	onChange,
@@ -28,6 +29,7 @@ const Input: FC<InputType> = ({
 			<input
 				readOnly={!editable}
 				disabled={!editable}
+				value={value}
 				onChange={handleInputChange}
 				className={cn(styles[styleVariant], className)}
 				{...props}
@@ -36,7 +38,7 @@ const Input: FC<InputType> = ({
 				<label
 					className={cn(
 						'pointer-events-none absolute left-1 -translate-y-1/2 bg-white px-1 capitalize leading-none transition-all duration-200 dark:bg-neutral-800',
-						props.value?.length
+						value.length
 							? 'top-0 dark:text-neutral-100'
 							: 'top-1/2 peer-focus:top-0 dark:text-neutral-300 peer-focus:dark:text-neutral-100'
 					)}
