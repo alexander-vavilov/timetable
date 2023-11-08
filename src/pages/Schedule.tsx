@@ -46,7 +46,6 @@ const Schedule: FC = () => {
 						))}
 					</div>
 				) : (
-					/* className='animate-slide-in' */
 					<div className='flex-auto'>
 						{Object.keys(lessons).length === 0 && !isEditMode ? (
 							<div className='flex h-full w-full flex-auto items-center justify-center'>

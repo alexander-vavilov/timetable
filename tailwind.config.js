@@ -12,7 +12,7 @@ export default {
 				'd-screen': '100dvh',
 			},
 			animation: {
-				'slide-in': 'slide-in 0.6s ease',
+				popup: 'popup 0.5s ease',
 			},
 			transitionProperty: {
 				background: 'background',

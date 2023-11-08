@@ -20,12 +20,14 @@ input[type='time']::-webkit-calendar-picker-indicator {
 	@apply absolute right-0 top-0 block h-full w-full cursor-pointer bg-transparent opacity-0;
 }
 
-@keyframes slide-in {
+@keyframes popup {
 	from {
-		transform: translateX(100%);
+		opacity: 0;
+		transform: translateY(20%);
 	}
 	to {
-		transform: translateX(0);
+		opacity: 1;
+		transform: translateY(0);
 	}
 }
 

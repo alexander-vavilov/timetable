@@ -18,8 +18,8 @@ export interface IScheduleContext {
 	setDate: Dispatch<SetStateAction<Date>>
 }
 
-export type ITheme = 'dark' | 'light'
-export type IThemeContext = {
-	theme: ITheme
+export type themeType = 'dark' | 'light'
+export interface IThemeContext {
+	theme: themeType
 	switchTheme: () => void
 }

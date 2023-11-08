@@ -1,6 +1,6 @@
 import { FC } from 'react'
-import useKeyDown from '../hooks/useKeyDown'
-import useClickAway from '../hooks/useClickAway'
+import { useKeyDown } from '../hooks/useKeyDown'
+import { useClickAway } from '../hooks/useClickAway'
 import CloseButton from './CloseButton'
 import Overlay from './Overlay'
 import { IModal } from '../types'
