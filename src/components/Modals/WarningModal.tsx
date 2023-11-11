@@ -30,12 +30,15 @@ const WarningModal: FC<IWarningModal> = ({ confirmHandler, ...props }) => {
 					<ReactSVG src={CatSvg} className='w-24' />
 				</div>
 				<div className='flex items-center gap-4'>
-					<Button onClick={confirm} className='flex-auto bg-red-500 text-white'>
+					<Button
+						onClick={confirm}
+						className='flex-auto bg-red-600 hover:bg-red-700'
+					>
 						Удалить
 					</Button>
 					<Button
 						onClick={props.handleClose}
-						className='flex-auto !bg-gray-400 text-white transition-background hover:!bg-gray-400/80 dark:!bg-neutral-600 hover:dark:!bg-neutral-500'
+						className='flex-auto cancel-button'
 					>
 						Отменить
 					</Button>

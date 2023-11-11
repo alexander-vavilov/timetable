@@ -10,10 +10,7 @@ const ScheduleDay: FC<{ date: Date }> = ({ date }) => {
 		ScheduleContext
 	) as IScheduleContext
 
-	const lessonsArr = Object.keys(lessons).map(id => ({
-		...lessons[id],
-		id,
-	}))
+	const lessonsArr = Object.keys(lessons).map(id => ({ ...lessons[id], id }))
 
 	const dayLessons = lessonsArr.filter(({ weekDay }) => {
 		return weekDay === getDay(date)

@@ -22,7 +22,7 @@ const FormAnonymousButton: FC<IFormAnonymousButton> = ({
 		<Button
 			onClick={handleSignInAnonymously}
 			className={cn(
-				'flex items-center justify-center gap-2 bg-neutral-950 text-white',
+				'flex items-center justify-center gap-2 bg-neutral-950 hover:bg-neutral-900 text-white',
 				className
 			)}
 			{...props}

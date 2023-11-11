@@ -32,7 +32,7 @@ const Schedule: FC = () => {
 					<ScheduleTabs />
 				</div>
 				{!isOwner && (
-					<span className='text-neutral-400 text-xs'>
+					<span className='text-neutral-400 text-xs pl-2'>
 						Расписание доступно только в режиме просмотра
 					</span>
 				)}

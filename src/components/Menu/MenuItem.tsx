@@ -9,7 +9,7 @@ interface IMenuItem {
 	handler: () => void
 	warning?: boolean
 	permissions?: boolean
-	handleCloseMenu: () => void
+	handleClose: () => void
 }
 
 const MenuItem: FC<IMenuItem> = ({
@@ -18,7 +18,7 @@ const MenuItem: FC<IMenuItem> = ({
 	handler,
 	warning = false,
 	permissions = true,
-	handleCloseMenu,
+	handleClose,
 }) => {
 	const [isWarningOpen, setIsWarningOpen] = useState(false)
 
@@ -28,7 +28,7 @@ const MenuItem: FC<IMenuItem> = ({
 		} else {
 			handler()
 		}
-		handleCloseMenu()
+		handleClose()
 	}
 
 	const handleCloseWarning = () => setIsWarningOpen(false)

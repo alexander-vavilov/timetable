@@ -1,17 +1,17 @@
 import { FC, useState } from 'react'
-import { useClickAway } from '../../hooks/useClickAway'
 import MenuButton from './MenuButton'
 import { useKeyDown } from '../../hooks/useKeyDown'
 import MenuItems from './MenuItems'
 import Overlay from '../Overlay'
 import { cn } from '../../utils'
+import { useClickAway } from '../../hooks/useClickAway'
 
 const Menu: FC = () => {
 	const [isOpen, setIsOpen] = useState(false)
 
-	const handleCloseMenu = () => setIsOpen(false)
+	const handleClose = () => setIsOpen(false)
 
-	const ref = useClickAway(handleCloseMenu)
+	const ref = useClickAway(handleClose)
 	useKeyDown(e => {
 		e.key === 'Escape' && setIsOpen(false)
 	})
@@ -29,7 +29,7 @@ const Menu: FC = () => {
 						!isOpen && 'invisible scale-75 opacity-0'
 					)}
 				>
-					<MenuItems handleCloseMenu={handleCloseMenu} />
+					<MenuItems handleClose={handleClose} />
 				</div>
 			</div>
 			{isOpen && <Overlay />}

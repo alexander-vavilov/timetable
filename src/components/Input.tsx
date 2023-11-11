@@ -3,11 +3,11 @@ import { InputType } from '../types'
 import { cn } from '../utils'
 
 const defaultStyles =
-	'peer w-full border-gray-200 bg-transparent px-2 py-1 transition-colors duration-300 focus:border-gray-500 disabled:text-white dark:border-neutral-500 focus:dark:border-neutral-200'
+	'peer w-full bg-transparent input focus:border-gray-500 disabled:text-white focus:dark:border-neutral-200'
 
 const styles = {
 	outline: `${defaultStyles} rounded-md border-2`,
-	flushed: `${defaultStyles} rounded-none border-b-2`,
+	flushed: `${defaultStyles} border-b-2`,
 	time: 'max-w-max rounded-md bg-gray-200 p-1 text-sm dark:bg-neutral-700',
 }
 

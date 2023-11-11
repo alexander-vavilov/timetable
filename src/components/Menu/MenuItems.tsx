@@ -25,10 +25,10 @@ import { toast } from 'sonner'
 import { deleteDoc, doc } from 'firebase/firestore'
 
 interface IMenuItems {
-	handleCloseMenu: () => void
+	handleClose: () => void
 }
 
-const MenuItems: FC<IMenuItems> = ({ handleCloseMenu }) => {
+const MenuItems: FC<IMenuItems> = ({ handleClose }) => {
 	const { isEditMode, setIsEditMode } = useContext(
 		ScheduleContext
 	) as IScheduleContext
@@ -45,6 +45,7 @@ const MenuItems: FC<IMenuItems> = ({ handleCloseMenu }) => {
 		try {
 			const docRef = doc(db, 'schedules', scheduleId)
 			await deleteDoc(docRef)
+
 			toast.success('Расписание успешно удалено!')
 		} catch (error) {
 			toast.error('Не удалось удалить расписание.')
@@ -92,11 +93,7 @@ const MenuItems: FC<IMenuItems> = ({ handleCloseMenu }) => {
 	return (
 		<ul className='flex max-h-[278px] w-full max-w-[18rem] flex-col overflow-y-auto overflow-x-hidden rounded-md border border-gray-200 bg-white p-2 shadow-md dark:border-neutral-800 dark:bg-neutral-900 dark:shadow-none'>
 			{items.map(({ ...props }) => (
-				<MenuItem
-					key={props.label}
-					handleCloseMenu={handleCloseMenu}
-					{...props}
-				/>
+				<MenuItem key={props.label} handleClose={handleClose} {...props} />
 			))}
 		</ul>
 	)

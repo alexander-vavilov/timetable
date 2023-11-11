@@ -1,9 +1,17 @@
 import { FC } from 'react'
 import { cn } from '../utils'
 
-const Overlay: FC<{ className?: string }> = ({ className }) => {
+interface IOverlay {
+	className?: string
+	onClick?: () => void
+}
+
+const Overlay: FC<IOverlay> = ({ className, onClick }) => {
 	return (
-		<div className={cn('fixed left-0 top-0 z-10 h-full w-full', className)} />
+		<div
+			onClick={onClick}
+			className={cn('fixed left-0 top-0 z-10 h-full w-full', className)}
+		/>
 	)
 }
 
