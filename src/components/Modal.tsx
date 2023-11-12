@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { useKeyDown } from '../hooks/useKeyDown'
 import CloseButton from './CloseButton'
 import Overlay from './Overlay'
-import { IModal } from '../types'
+import { ModalProps } from '../types'
 import { createPortal } from 'react-dom'
 import { cn } from '../utils'
 
@@ -16,7 +16,7 @@ const styles = {
     'left-1/2 top-1/2 h-auto max-h-[60%] max-w-4xl -translate-x-1/2 -translate-y-1/2 rounded-md shadow-md dark:shadow-none'
 }
 
-const Modal: FC<IModal> = ({
+const Modal: FC<ModalProps> = ({
   isOpen = true,
   variant = 'mobileFullSize',
   className,

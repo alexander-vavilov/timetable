@@ -10,12 +10,12 @@ import { toast } from 'sonner'
 import { deleteObject, ref } from 'firebase/storage'
 import { deleteDoc, doc } from 'firebase/firestore'
 
-interface ILessonsItem extends ILesson {
+interface LessonsItemProps extends ILesson {
   date: Date
   id: string
 }
 
-const LessonsItem: FC<ILessonsItem> = ({ date, ...props }) => {
+const LessonsItem: FC<LessonsItemProps> = ({ date, ...props }) => {
   const { currentUser } = useContext(UserContext) as IUserContext
   const { isEditMode } = useContext(ScheduleContext) as IScheduleContext
 

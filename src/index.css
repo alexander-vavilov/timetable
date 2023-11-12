@@ -11,7 +11,7 @@
 
 input,
 button {
-  @apply outline-none;
+  @apply outline-none focus:outline-none;
 }
 input[type='time'] {
   @apply relative;
@@ -36,7 +36,7 @@ input[type='time']::-webkit-calendar-picker-indicator {
     @apply animate-pulse rounded-sm bg-gray-300 dark:bg-neutral-700;
   }
   .button {
-    @apply rounded-md bg-green-700 px-2 py-1 text-white transition-background hover:bg-green-800;
+    @apply cursor-pointer rounded-md bg-green-700 px-2 py-1 text-white transition-background hover:bg-green-800;
   }
   .cancel-button {
     @apply bg-gray-400 hover:bg-gray-400/80 dark:bg-neutral-600 hover:dark:bg-neutral-700;

@@ -24,7 +24,7 @@ const ShareModal: FC = () => {
 
 	const handleClick = () => {
 		navigator.clipboard.writeText(scheduleURL)
-		toast.success('Ссылка успешно скопирована')
+		toast.success('Ссылка успешно скопирована.')
 	}
 
 	const navigate = useNavigate()

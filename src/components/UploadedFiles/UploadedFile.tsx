@@ -1,22 +1,21 @@
 import { Dispatch, FC, SetStateAction } from 'react'
 import { MdDeleteOutline } from 'react-icons/md'
 
-interface IUploadedFile {
+interface UploadedFileProps {
   file: File
   handleDeleteFile: () => void
   setViewedImageURL: Dispatch<SetStateAction<string | null>>
 }
 
-const UploadedFile: FC<IUploadedFile> = ({
+const UploadedFile: FC<UploadedFileProps> = ({
   file,
   handleDeleteFile,
   setViewedImageURL
 }) => {
-  const blob = new Blob([file], { type: file.type })
-  const url = URL.createObjectURL(blob)
+  const url = URL.createObjectURL(file)
 
   return (
-    <div className='relative'>
+    <div className='relative flex-auto'>
       <img
         src={url}
         onClick={() => setViewedImageURL(url)}
@@ -26,7 +25,7 @@ const UploadedFile: FC<IUploadedFile> = ({
       <div className='absolute right-0 top-0'>
         <button
           onClick={handleDeleteFile}
-          className='m-1 rounded-full border-2 border-neutral-600 bg-neutral-900 p-1 transition-all hover:scale-105 hover:text-red-500'
+          className='m-1 rounded-full border-2 border-neutral-600 bg-neutral-900 p-1 transition-colors hover:text-red-500'
         >
           <MdDeleteOutline size={18} />
         </button>

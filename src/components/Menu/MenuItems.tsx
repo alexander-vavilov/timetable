@@ -24,11 +24,11 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 import { deleteDoc, doc } from 'firebase/firestore'
 
-interface IMenuItems {
+interface MenuItemsProps {
 	handleClose: () => void
 }
 
-const MenuItems: FC<IMenuItems> = ({ handleClose }) => {
+const MenuItems: FC<MenuItemsProps> = ({ handleClose }) => {
 	const { isEditMode, setIsEditMode } = useContext(
 		ScheduleContext
 	) as IScheduleContext

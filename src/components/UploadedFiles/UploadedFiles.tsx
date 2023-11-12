@@ -2,20 +2,21 @@ import { Dispatch, FC, SetStateAction, useState } from 'react'
 import UploadedFile from './UploadedFile'
 import ImagesViewer from '../ImagesViewer/ImageViewer'
 
-interface IUploadedFiles {
+interface UploadedFilesProps {
   files: File[]
   setFiles: Dispatch<SetStateAction<File[]>>
 }
 
-const UploadedFiles: FC<IUploadedFiles> = ({ files, setFiles }) => {
+const UploadedFiles: FC<UploadedFilesProps> = ({ files, setFiles }) => {
   const [viewedImageURL, setViewedImageURL] = useState<string | null>(null)
 
   const handleDeleteFile = (index: number) => {
-    setFiles([...files].filter((_, idx) => index !== idx))
+    const filteredFiles = [...files].filter((_, idx) => index !== idx)
+    setFiles(filteredFiles)
   }
 
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='flex flex-wrap gap-2'>
       {files.map((file, index) => (
         <UploadedFile
           key={file.name}

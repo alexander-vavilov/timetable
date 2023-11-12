@@ -1,11 +1,11 @@
 import { FC } from 'react'
 
-interface ISpinner {
+interface SpinnerProps {
   width?: number
   height?: number
 }
 
-const Spinner: FC<ISpinner> = ({ width = 32, height = 32 }) => {
+const Spinner: FC<SpinnerProps> = ({ width = 32, height = 32 }) => {
   return (
     <div role='status' style={{ width: `${width}px`, height: `${height}px` }}>
       <svg

@@ -1,13 +1,18 @@
 import { FC } from 'react'
 
-interface IScheduleTab {
+interface ScheduleTabProps {
   onChange: () => void
   checked: boolean
   label: string
   id: string
 }
 
-const ScheduleTab: FC<IScheduleTab> = ({ onChange, checked, label, id }) => {
+const ScheduleTab: FC<ScheduleTabProps> = ({
+  onChange,
+  checked,
+  label,
+  id
+}) => {
   return (
     <div>
       <input
@@ -20,7 +25,7 @@ const ScheduleTab: FC<IScheduleTab> = ({ onChange, checked, label, id }) => {
       />
       <label
         htmlFor={id}
-        className='dark:peer-checked:bg-neutral-700 block cursor-pointer select-none rounded-md p-1 transition-background peer-checked:bg-gray-200/60'
+        className='block cursor-pointer select-none rounded-md p-1 transition-background peer-checked:bg-gray-200/60 dark:peer-checked:bg-neutral-700'
       >
         {label}
       </label>

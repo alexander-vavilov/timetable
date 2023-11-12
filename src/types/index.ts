@@ -40,7 +40,7 @@ export type InputType = {
   editable?: boolean
 } & InputHTMLAttributes<HTMLInputElement>
 
-export interface IModal {
+export interface ModalProps {
   children?: ReactNode
   variant?: 'mobileFullSize' | 'mobileCompact'
   handleClose: () => void
