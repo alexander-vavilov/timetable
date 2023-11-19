@@ -1,12 +1,21 @@
-import { ChangeEvent, FC, useState } from 'react'
+import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react'
 import { MdAttachFile } from 'react-icons/md'
 import UploadModal from '../Modals/UploadModal'
 
-const LessonAttachFiles: FC = () => {
+interface LessonAttachFilesProps {
+  setUploadedFiles: Dispatch<SetStateAction<File[]>>
+}
+
+const LessonAttachFiles: FC<LessonAttachFilesProps> = ({
+  setUploadedFiles
+}) => {
   const [files, setFiles] = useState<File[]>([])
 
-  const uploadFilesLocally = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) setFiles([...files, ...e.target.files])
+  const addFiles = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return
+
+    const filesArr = [...e.target.files]
+    setFiles((files) => [...files, ...filesArr])
   }
 
   return (
@@ -17,7 +26,7 @@ const LessonAttachFiles: FC = () => {
           id='file'
           accept='image/*'
           multiple
-          onChange={(e) => uploadFilesLocally(e)}
+          onChange={(e) => addFiles(e)}
           className='hidden w-0 opacity-0'
         />
         <label
@@ -27,14 +36,12 @@ const LessonAttachFiles: FC = () => {
           <MdAttachFile size={20} />
           <span>Прикрепить изображения</span>
         </label>
-        {/* <span className='text-xs text-neutral-400'>
-          (изображения и любые другие виды файлов)
-        </span> */}
       </div>
       <UploadModal
         isOpen={files.length > 0}
+        handleClose={() => setFiles([])}
         files={files}
-        setFiles={setFiles}
+        setUploadedFiles={setUploadedFiles}
       />
     </>
   )

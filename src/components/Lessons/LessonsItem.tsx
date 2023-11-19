@@ -1,5 +1,5 @@
 import { FC, useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { IScheduleContext, IUserContext } from '../../types/contexts'
 import { ILesson } from '../../types'
 import { ScheduleContext } from '../../contexts/ScheduleContext'
@@ -9,6 +9,7 @@ import { db, storage } from '../../../firebase'
 import { toast } from 'sonner'
 import { deleteObject, ref } from 'firebase/storage'
 import { deleteDoc, doc } from 'firebase/firestore'
+import TextInfo from '../TextInfo'
 
 interface LessonsItemProps extends ILesson {
   date: Date
@@ -19,19 +20,23 @@ const LessonsItem: FC<LessonsItemProps> = ({ date, ...props }) => {
   const { currentUser } = useContext(UserContext) as IUserContext
   const { isEditMode } = useContext(ScheduleContext) as IScheduleContext
 
+  const { scheduleId } = useParams()
+
   const deleteLesson = async () => {
-    if (!currentUser) return
+    if (!currentUser || !scheduleId) return
 
     try {
       const docRef = doc(db, 'schedules', currentUser.uid, 'lessons', props.id)
       await deleteDoc(docRef)
 
-      if (!props.files.length) return
+      const storageRef = ref(storage, `${scheduleId}/${props.id}`)
+      await deleteObject(storageRef)
+      // if (!props.files.length) return
 
-      for (const fileURL of props.files) {
-        const storageRef = ref(storage, fileURL)
-        await deleteObject(storageRef)
-      }
+      // for (const fileURL of props.files) {
+      //   const storageRef = ref(storage, fileURL)
+      //   await deleteObject(storageRef)
+      // }
     } catch (error) {
       toast.error('Что-то пошло не так...')
     }
@@ -54,9 +59,7 @@ const LessonsItem: FC<LessonsItemProps> = ({ date, ...props }) => {
         <div className='flex max-w-[250px] flex-col leading-none'>
           <span className='truncate'>{props.name}</span>
           {currentHomework && (
-            <span className='truncate text-xs text-neutral-400'>
-              {currentHomework}
-            </span>
+            <TextInfo className='truncate'>{currentHomework}</TextInfo>
           )}
         </div>
       </Link>

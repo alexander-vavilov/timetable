@@ -7,49 +7,50 @@ import { IScheduleContext } from '../types/contexts'
 export const ScheduleContext = createContext<IScheduleContext | null>(null)
 
 export const ScheduleContextProvider: FC<{ children: ReactNode }> = ({
-	children,
+  children
 }) => {
-	const [lessons, setLessons] = useState({})
-	const [isEditMode, setIsEditMode] = useState(false)
-	const [date, setDate] = useState(new Date())
-	const [isLoading, setIsLoading] = useState(true)
+  const [lessons, setLessons] = useState({})
+  const [isEditMode, setIsEditMode] = useState(false)
+  const [date, setDate] = useState(new Date())
+  const [isLoading, setIsLoading] = useState(true)
 
-	const { scheduleId } = useParams()
+  const { scheduleId } = useParams()
 
-	useEffect(() => {
-		if (!scheduleId) return
-		setIsLoading(true)
+  useEffect(() => {
+    if (!scheduleId) return
+    setIsLoading(true)
 
-		const q = query(
-			collection(db, 'schedules', scheduleId, 'lessons'),
-			orderBy('timestamp')
-		)
-		const unsub = onSnapshot(q, querySnapshot => {
-			const lessons: { [key: string]: {} } = {}
-			querySnapshot.forEach(doc => {
-				const { timestamp, ...lesson } = doc.data()
-				lessons[doc.id] = { ...lesson }
-			})
+    const q = query(
+      collection(db, 'schedules', scheduleId, 'lessons'),
+      orderBy('timestamp')
+    )
+    const unsub = onSnapshot(q, (querySnapshot) => {
+      const lessons: { [key: string]: {} } = {}
 
-			setLessons(lessons)
-			setIsLoading(false)
-		})
+      querySnapshot.forEach((doc) => {
+        const { timestamp, ...lesson } = doc.data()
+        lessons[doc.id] = { ...lesson }
+      })
 
-		return () => unsub()
-	}, [scheduleId])
+      setLessons(lessons)
+      setIsLoading(false)
+    })
 
-	const value = {
-		lessons,
-		isLoading,
-		isEditMode,
-		setIsEditMode,
-		date,
-		setDate,
-	}
+    return () => unsub()
+  }, [scheduleId])
 
-	return (
-		<ScheduleContext.Provider value={value}>
-			{children}
-		</ScheduleContext.Provider>
-	)
+  const value = {
+    lessons,
+    isLoading,
+    isEditMode,
+    setIsEditMode,
+    date,
+    setDate
+  }
+
+  return (
+    <ScheduleContext.Provider value={value}>
+      {children}
+    </ScheduleContext.Provider>
+  )
 }

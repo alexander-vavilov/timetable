@@ -30,7 +30,9 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
     },
     {
       target: imageRef,
-      pinch: { scaleBounds: { min: 0.6, max: 3.6 } }
+      pinch: {
+        scaleBounds: { min: 1, max: 4 }
+      }
     }
   )
 

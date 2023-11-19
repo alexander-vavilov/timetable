@@ -6,6 +6,11 @@ import {
   ReactNode
 } from 'react'
 
+export interface IFile {
+  URL: string
+  timestamp: Date
+}
+
 export interface ILesson {
   name: string
   location?: string
@@ -15,7 +20,7 @@ export interface ILesson {
   homework?: {
     [key: string]: string
   }
-  files: string[]
+  files: IFile[]
   weekDay: number
   id: string
 }
