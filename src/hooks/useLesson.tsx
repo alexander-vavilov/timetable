@@ -4,9 +4,9 @@ import { IScheduleContext, IUserContext } from '../types/contexts'
 import { useParams } from 'react-router-dom'
 import { Timestamp, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import { db, storage } from '../../firebase'
-import { toast } from 'sonner'
 import { ScheduleContext } from '../contexts/ScheduleContext'
 import { getDownloadURL, listAll, ref } from 'firebase/storage'
+import { toastError } from '../toast'
 
 const useLesson = (id: string) => {
   const { currentUser } = useContext(UserContext) as IUserContext
@@ -16,7 +16,6 @@ const useLesson = (id: string) => {
   const initialLesson = lessons[id]
 
   const isEditable = scheduleId === currentUser?.uid
-  // const isChanged = !isEqual(currentLesson, initialLesson)
 
   const getLessonFilesURL = async () => {
     const listRef = ref(storage, `schedules/${scheduleId}/${id}`)
@@ -42,9 +41,7 @@ const useLesson = (id: string) => {
         await setDoc(docRef, { ...lessonData, timestamp: Timestamp.now() })
       }
     } catch (error) {
-      toast.error(error instanceof Error && error.message)
-      toast.error('Не удалось сохранить изменения.')
-      console.log(error)
+      toastError(error)
     }
   }
 

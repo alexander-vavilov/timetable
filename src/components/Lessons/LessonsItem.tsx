@@ -6,10 +6,10 @@ import { ScheduleContext } from '../../contexts/ScheduleContext'
 import LessonsItemDeleteButton from './LessonsItemDeleteButton'
 import { UserContext } from '../../contexts/UserContext'
 import { db, storage } from '../../../firebase'
-import { toast } from 'sonner'
-import { deleteObject, ref } from 'firebase/storage'
+import { deleteObject, listAll, ref } from 'firebase/storage'
 import { deleteDoc, doc } from 'firebase/firestore'
 import TextInfo from '../TextInfo'
+import { toastError } from '../../toast'
 
 interface LessonsItemProps extends ILesson {
   date: Date
@@ -29,16 +29,16 @@ const LessonsItem: FC<LessonsItemProps> = ({ date, ...props }) => {
       const docRef = doc(db, 'schedules', currentUser.uid, 'lessons', props.id)
       await deleteDoc(docRef)
 
-      const storageRef = ref(storage, `${scheduleId}/${props.id}`)
-      await deleteObject(storageRef)
-      // if (!props.files.length) return
+      const listRef = ref(storage, `schedules/${scheduleId}/${props.id}`)
+      const listResult = await listAll(listRef)
 
-      // for (const fileURL of props.files) {
-      //   const storageRef = ref(storage, fileURL)
-      //   await deleteObject(storageRef)
-      // }
+      if (listResult.items) {
+        listResult.items.forEach(async ({ fullPath }) => {
+          await deleteObject(ref(storage, fullPath))
+        })
+      }
     } catch (error) {
-      toast.error('Что-то пошло не так...')
+      toastError(error)
     }
   }
 

@@ -1,21 +1,21 @@
 import { ChangeEvent, Dispatch, FC, SetStateAction, useState } from 'react'
 import { MdAttachFile } from 'react-icons/md'
-import UploadModal from '../Modals/UploadModal'
+import AttachModal from '../Modals/AttachModal'
 
 interface LessonAttachFilesProps {
-  setUploadedFiles: Dispatch<SetStateAction<File[]>>
+  setAttachedFiles: Dispatch<SetStateAction<File[]>>
 }
 
 const LessonAttachFiles: FC<LessonAttachFilesProps> = ({
-  setUploadedFiles
+  setAttachedFiles
 }) => {
-  const [files, setFiles] = useState<File[]>([])
+  const [currentFiles, setCurrentFiles] = useState<File[]>([])
 
   const addFiles = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return
 
     const filesArr = [...e.target.files]
-    setFiles((files) => [...files, ...filesArr])
+    setCurrentFiles((files) => [...files, ...filesArr])
   }
 
   return (
@@ -37,11 +37,12 @@ const LessonAttachFiles: FC<LessonAttachFilesProps> = ({
           <span>Прикрепить изображения</span>
         </label>
       </div>
-      <UploadModal
-        isOpen={files.length > 0}
-        handleClose={() => setFiles([])}
-        files={files}
-        setUploadedFiles={setUploadedFiles}
+      <AttachModal
+        isOpen={currentFiles.length > 0}
+        handleClose={() => setCurrentFiles([])}
+        currentFiles={currentFiles}
+        setCurrentFiles={setCurrentFiles}
+        setAttachedFiles={setAttachedFiles}
       />
     </>
   )

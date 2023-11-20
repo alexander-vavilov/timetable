@@ -32,11 +32,11 @@ const LessonContent: FC = () => {
   )
 
   const [existingFilesURL, setExistingFilesURL] = useState<string[]>([])
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
-  const uploadedFilesURL = uploadedFiles.map((file) => {
+  const [attachedFiles, setAttachedFiles] = useState<File[]>([])
+  const attachedFilesURL = attachedFiles.map((file) => {
     return URL.createObjectURL(file)
   })
-  const filesURL = [...existingFilesURL, ...uploadedFilesURL]
+  const filesURL = [...existingFilesURL, ...attachedFilesURL]
 
   useEffect(() => {
     getLessonFilesURL().then(setExistingFilesURL)
@@ -52,26 +52,25 @@ const LessonContent: FC = () => {
     end: time.end,
     homework: {
       ...initialLesson?.homework,
-      [date.toISOString()]: homework
+      ...(homework && { [date.toISOString()]: homework })
     }
   }
 
   const isChanged = !isEqual(currentLesson, initialLesson)
-  const isNonUploadedFilesExist = uploadedFiles.length > 0
+  const isNonUploadedFilesExist = attachedFiles.length > 0
 
   const { handleUpload, progress: fileUploadProgress } = useUploadFile()
 
+  const handleUploadLessonFiles = () => {
+    attachedFiles.forEach(async (file) => await handleUpload(file))
+
+    setExistingFilesURL(filesURL)
+    setAttachedFiles([])
+  }
+
   const handleSave = () => {
-    saveLesson(currentLesson)
-
-    if (uploadedFiles.length > 0) {
-      uploadedFiles.forEach(async (file) => {
-        await handleUpload(file)
-      })
-
-      setExistingFilesURL((filesURL) => [...filesURL, ...uploadedFilesURL])
-      setUploadedFiles([])
-    }
+    if (isChanged) saveLesson(currentLesson)
+    if (attachedFiles.length > 0) handleUploadLessonFiles()
   }
 
   return (
@@ -114,7 +113,7 @@ const LessonContent: FC = () => {
             placeholder='Домашнее задание'
           />
           {isEditable && (
-            <LessonAttachFiles setUploadedFiles={setUploadedFiles} />
+            <LessonAttachFiles setAttachedFiles={setAttachedFiles} />
           )}
           {filesURL.length > 0 && <LessonAttachments filesURL={filesURL} />}
         </div>

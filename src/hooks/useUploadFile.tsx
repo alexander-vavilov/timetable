@@ -5,6 +5,7 @@ import { storage } from '../../firebase'
 import { useParams } from 'react-router-dom'
 import { nanoid } from 'nanoid'
 import { toast } from 'sonner'
+import { toastError } from '../toast'
 
 const useUploadFile = () => {
   const { scheduleId, lessonId } = useParams()
@@ -12,14 +13,14 @@ const useUploadFile = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [progress, setProgress] = useState(0)
 
-  const handleUpload = async (file: File) => {
+  const handleUpload = async (file: File, maxFileSize: number = 15) => {
     if (!file) return
 
     setIsLoading(true)
 
     try {
-      if (file.size / 1024 / 1024 > 50) {
-        throw new Error('Максимальный размер одного файла — 50мб.')
+      if (file.size / 1024 / 1024 > maxFileSize) {
+        throw new Error(`Максимальный размер одного файла — ${maxFileSize}мб.`)
       }
 
       const compressedImage = await compressImage(file)
@@ -53,9 +54,7 @@ const useUploadFile = () => {
         )
       })
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : 'Что-то пошло не так...'
-      )
+      toastError(error)
     } finally {
       setIsLoading(false)
     }

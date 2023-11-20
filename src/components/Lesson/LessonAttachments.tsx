@@ -3,33 +3,32 @@ import ImagesViewer from '../ImagesViewer/ImageViewer'
 import TextInfo from '../TextInfo'
 
 const LessonAttachments: FC<{ filesURL: string[] }> = ({ filesURL }) => {
-  const [viewedImageURL, setViewedImageURL] = useState<string | null>(null)
+  const [viewedImageIndex, setViewedImageIndex] = useState<number>(-1)
 
   return (
     <div className='flex flex-col'>
       <div className='flex flex-wrap gap-2'>
-        {filesURL.map((fileURL) => (
+        {filesURL.map((fileURL, index) => (
           <img
             key={fileURL}
             src={fileURL}
-            width={128}
-            height={128}
-            onClick={() => setViewedImageURL(fileURL)}
-            className='h-32 w-32 cursor-pointer overflow-hidden rounded-md object-cover object-center'
+            onClick={() => setViewedImageIndex(index)}
+            className='h-32 w-32 cursor-pointer overflow-hidden rounded-md object-cover object-center md:h-32 md:w-32'
             loading='lazy'
             alt='img'
           />
         ))}
-        {viewedImageURL && (
+        {viewedImageIndex >= 0 && (
           <ImagesViewer
-            viewedImageURL={viewedImageURL}
-            setViewedImageURL={setViewedImageURL}
+            filesURL={filesURL}
+            viewedImageIndex={viewedImageIndex}
+            setViewedImageIndex={setViewedImageIndex}
           />
         )}
       </div>
       <TextInfo>
-        Внимание! Файлы автоматически удаляются спустя 7 дней после даты их
-        добавления с целью экономии места на серверном хранилище.
+        Внимание! Файлы автоматически удаляются спустя 7 дней после их
+        добавления в целях экономии места на серверном хранилище.
       </TextInfo>
     </div>
   )
