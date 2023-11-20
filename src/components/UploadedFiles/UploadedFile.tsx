@@ -1,16 +1,16 @@
-import { Dispatch, FC, SetStateAction } from 'react'
+import { FC } from 'react'
 import { MdDeleteOutline } from 'react-icons/md'
 
 interface UploadedFileProps {
   file: File
   handleDeleteFile: () => void
-  setViewedImageURL: Dispatch<SetStateAction<string | null>>
+  onClick: () => void
 }
 
 const UploadedFile: FC<UploadedFileProps> = ({
   file,
   handleDeleteFile,
-  setViewedImageURL
+  onClick
 }) => {
   const url = URL.createObjectURL(file)
 
@@ -18,7 +18,7 @@ const UploadedFile: FC<UploadedFileProps> = ({
     <div className='relative flex-auto'>
       <img
         src={url}
-        onClick={() => setViewedImageURL(url)}
+        onClick={onClick}
         className='max-h-40 min-h-[60px] w-full max-w-full cursor-pointer rounded-md object-cover object-center'
         alt={file.name}
       />

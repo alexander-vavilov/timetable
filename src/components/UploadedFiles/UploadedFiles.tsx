@@ -8,7 +8,9 @@ interface UploadedFilesProps {
 }
 
 const UploadedFiles: FC<UploadedFilesProps> = ({ files, setFiles }) => {
-  const [viewedImageURL, setViewedImageURL] = useState<string | null>(null)
+  const filesURL = files.map((file) => URL.createObjectURL(file))
+
+  const [viewedImageIndex, setViewedImageIndex] = useState<number>(-1)
 
   const handleDeleteFile = (index: number) => {
     const filteredFiles = [...files].filter((_, idx) => index !== idx)
@@ -21,14 +23,15 @@ const UploadedFiles: FC<UploadedFilesProps> = ({ files, setFiles }) => {
         <UploadedFile
           key={file.name}
           file={file}
+          onClick={() => setViewedImageIndex(index)}
           handleDeleteFile={() => handleDeleteFile(index)}
-          setViewedImageURL={setViewedImageURL}
         />
       ))}
-      {viewedImageURL && (
+      {viewedImageIndex >= 0 && (
         <ImagesViewer
-          viewedImageURL={viewedImageURL}
-          setViewedImageURL={setViewedImageURL}
+          filesURL={filesURL}
+          viewedImageIndex={viewedImageIndex}
+          setViewedImageIndex={setViewedImageIndex}
         />
       )}
     </div>

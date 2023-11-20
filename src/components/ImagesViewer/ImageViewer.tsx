@@ -57,18 +57,18 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
   const previous = () => {
     setViewedImageIndex((prevIndex) => {
       if (isFirstItem) return prevIndex
+
+      setCrop(defaultCrop)
       return prevIndex - 1
     })
-
-    setCrop(defaultCrop)
   }
   const next = () => {
     setViewedImageIndex((prevIndex) => {
       if (isLastItem) return prevIndex
+
+      setCrop(defaultCrop)
       return prevIndex + 1
     })
-
-    setCrop(defaultCrop)
   }
 
   const rotate = () => {
