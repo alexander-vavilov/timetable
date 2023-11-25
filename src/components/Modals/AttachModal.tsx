@@ -1,9 +1,11 @@
 import { Dispatch, FC, SetStateAction } from 'react'
-import Modal from '../Modal'
+import Modal from '../Modal/Modal'
 import { ModalProps } from '../../types'
 import Button from '../Button'
 import UploadedFiles from '../UploadedFiles/UploadedFiles'
 import { toastError } from '../../toast'
+import ModalFooter from '../Modal/ModalFooter'
+import ModalContent from '../Modal/ModalContent'
 
 interface AttachModalProps extends Pick<ModalProps, 'isOpen' | 'handleClose'> {
   currentFiles: File[]
@@ -47,27 +49,25 @@ const AttachModal: FC<AttachModalProps> = ({
       variant='mobileCompact'
       className='max-h-[90%] max-w-[300px] sm:max-w-sm'
     >
-      <div className='h-full flex-auto overflow-y-auto overflow-x-hidden p-4'>
+      <ModalContent>
         <UploadedFiles files={currentFiles} setFiles={setCurrentFiles} />
-      </div>
-      <div className='flex flex-col gap-4 border-t border-gray-300 p-4 shadow-md dark:border-neutral-700 dark:shadow-none'>
-        <div className='flex flex-col items-center justify-between gap-2 sm:flex-row'>
-          <label
-            htmlFor='file'
-            className='button cancel-button w-full flex-auto text-center sm:w-auto sm:flex-none'
-          >
-            Добавить
-          </label>
-          <div className='flex w-full items-center justify-end gap-2 sm:w-auto'>
-            <Button onClick={handleClose} className='cancel-button flex-auto'>
-              Отмена
-            </Button>
-            <Button onClick={attachFiles} className='flex-auto'>
-              Прикрепить
-            </Button>
-          </div>
+      </ModalContent>
+      <ModalFooter className='justify-between gap-2'>
+        <label
+          htmlFor='file'
+          className='button cancel-button w-full flex-auto text-center sm:w-auto sm:flex-none'
+        >
+          Добавить
+        </label>
+        <div className='flex w-full items-center justify-end gap-2 sm:w-auto'>
+          <Button onClick={handleClose} className='cancel-button flex-auto'>
+            Отмена
+          </Button>
+          <Button onClick={attachFiles} className='flex-auto'>
+            Прикрепить
+          </Button>
         </div>
-      </div>
+      </ModalFooter>
     </Modal>
   )
 }

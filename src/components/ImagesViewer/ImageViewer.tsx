@@ -1,20 +1,21 @@
 import { Dispatch, FC, SetStateAction, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
-import Overlay from '../Overlay'
-import CloseButton from '../CloseButton'
 import { useGesture } from '@use-gesture/react'
+import { createPortal } from 'react-dom'
 import { AiOutlineDownload, AiOutlineRotateRight } from 'react-icons/ai'
 import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight
 } from 'react-icons/md'
 import { useKeyDown } from '../../hooks/useKeyDown'
+import CloseButton from '../CloseButton'
+import Overlay from '../Overlay'
 import TextInfo from '../TextInfo'
+import Spinner from '../Spinner'
 
 interface ImagesViewerProps {
   filesURL: string[]
   viewedImageIndex: number
-  setViewedImageIndex: Dispatch<SetStateAction<number>>
+  setViewedImageIndex: Dispatch<SetStateAction<number | null>>
 }
 
 const ImagesViewer: FC<ImagesViewerProps> = ({
@@ -26,6 +27,7 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
   const imageRef = useRef<HTMLImageElement>(null)
 
   const viewedImageURL = filesURL[viewedImageIndex]
+  const [isLoading, setIsLoading] = useState(true)
 
   const defaultCrop = { x: 0, y: 0, scale: 1, rotate: 0 }
   const [crop, setCrop] = useState(defaultCrop)
@@ -56,26 +58,24 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
 
   const previous = () => {
     setViewedImageIndex((prevIndex) => {
-      if (isFirstItem) return prevIndex
-
-      setCrop(defaultCrop)
+      if (isFirstItem || prevIndex === null) return prevIndex
       return prevIndex - 1
     })
+    setCrop(defaultCrop)
   }
   const next = () => {
     setViewedImageIndex((prevIndex) => {
-      if (isLastItem) return prevIndex
-
-      setCrop(defaultCrop)
+      if (isLastItem || prevIndex === null) return prevIndex
       return prevIndex + 1
     })
+    setCrop(defaultCrop)
   }
 
   const rotate = () => {
     setCrop((crop) => ({ ...crop, rotate: crop.rotate + 90 }))
   }
 
-  const handleClose = () => setViewedImageIndex(-1)
+  const handleClose = () => setViewedImageIndex(null)
 
   useKeyDown((e) => {
     if (e.key === 'ArrowLeft') previous()
@@ -85,9 +85,15 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
   if (!element) return
   return createPortal(
     <div className='absolute left-0 top-0 z-20 flex h-full w-full items-center justify-center overflow-hidden'>
+      {isLoading && (
+        <div className='absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2'>
+          <Spinner size={30} />
+        </div>
+      )}
       <img
         ref={imageRef}
         src={viewedImageURL}
+        onLoad={() => setIsLoading(false)}
         className='relative z-20 max-h-[80%] max-w-full cursor-move touch-none select-none'
         draggable={false}
         style={{

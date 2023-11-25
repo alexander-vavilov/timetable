@@ -1,16 +1,11 @@
 import { FC } from 'react'
 
-interface SpinnerProps {
-  width?: number
-  height?: number
-}
-
-const Spinner: FC<SpinnerProps> = ({ width = 32, height = 32 }) => {
+const Spinner: FC<{ size?: number }> = ({ size = 32 }) => {
   return (
-    <div role='status' style={{ width: `${width}px`, height: `${height}px` }}>
+    <div role='status' style={{ width: `${size}px`, height: `${size}px` }}>
       <svg
         aria-hidden='true'
-        className='mr-2 h-full w-full animate-spin fill-green-600 text-gray-100 dark:text-gray-600'
+        className='mr-2 h-full w-full animate-spin fill-green-600 text-gray-100 dark:text-neutral-600'
         viewBox='0 0 100 101'
         fill='none'
         xmlns='http://www.w3.org/2000/svg'

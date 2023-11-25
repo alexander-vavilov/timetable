@@ -15,3 +15,7 @@ export const compressImage = (file: File): Promise<Blob> => {
     })
   })
 }
+
+export const filesToURLs = (files: File[] | FileList) => {
+  return [...files].map((file) => URL.createObjectURL(file))
+}

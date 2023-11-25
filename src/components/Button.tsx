@@ -16,14 +16,18 @@ const Button: FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      className={cn('button relative overflow-hidden', className)}
+      className={cn(
+        'button relative select-none overflow-hidden',
+        isLoading && 'pointer-events-none',
+        className
+      )}
       disabled={!!isLoading}
       {...props}
     >
       {children}
       {isLoading && (
         <div className='absolute left-0 top-0 flex h-full w-full items-center justify-center bg-black/20 dark:bg-black/50'>
-          <Spinner width={20} height={20} />
+          <Spinner size={20} />
         </div>
       )}
     </button>

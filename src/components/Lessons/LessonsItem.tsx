@@ -7,7 +7,7 @@ import LessonsItemDeleteButton from './LessonsItemDeleteButton'
 import { UserContext } from '../../contexts/UserContext'
 import { db, storage } from '../../../firebase'
 import { deleteObject, listAll, ref } from 'firebase/storage'
-import { deleteDoc, doc } from 'firebase/firestore'
+import { deleteField, doc, updateDoc } from 'firebase/firestore'
 import TextInfo from '../TextInfo'
 import { toastError } from '../../toast'
 
@@ -26,8 +26,8 @@ const LessonsItem: FC<LessonsItemProps> = ({ date, ...props }) => {
     if (!currentUser || !scheduleId) return
 
     try {
-      const docRef = doc(db, 'schedules', currentUser.uid, 'lessons', props.id)
-      await deleteDoc(docRef)
+      const docRef = doc(db, 'schedules', scheduleId)
+      await updateDoc(docRef, { [props.id]: deleteField() })
 
       const listRef = ref(storage, `schedules/${scheduleId}/${props.id}`)
       const listResult = await listAll(listRef)

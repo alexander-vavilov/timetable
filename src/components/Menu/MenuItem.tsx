@@ -40,7 +40,7 @@ const MenuItem: FC<MenuItemProps> = ({
         'cursor-pointer rounded-md transition-background',
         warning
           ? 'hover:bg-red-400/10'
-          : 'hover:bg-gray-200/50 dark:hover:bg-neutral-700/70'
+          : 'hover:bg-gray-200/50 hover:dark:bg-neutral-700/70'
       )}
     >
       <button

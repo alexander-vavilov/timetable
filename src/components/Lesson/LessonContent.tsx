@@ -1,14 +1,18 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { getDay } from 'date-fns'
 import isEqual from 'lodash.isequal'
-import Input from '../Input'
-import LessonTimeInputs from './LessonTimeInputs'
-import LessonFooter from './LessonFooter'
-import LessonAttachments from './LessonAttachments'
-import LessonAttachFiles from './LessonAttachFiles'
 import useLesson from '../../hooks/useLesson'
 import useUploadFile from '../../hooks/useUploadFile'
+import { toastError } from '../../toast'
+import Input from '../Input'
+import LessonAttachFiles from './LessonAttachFiles'
+import LessonAttachments from './LessonAttachments'
+import LessonTimeInputs from './LessonTimeInputs'
+import ModalFooter from '../Modal/ModalFooter'
+import Button from '../Button'
+import { filesToURLs } from '../../utils'
+import ModalContent from '../Modal/ModalContent'
 
 const LessonContent: FC = () => {
   const { lessonId } = useParams()
@@ -17,15 +21,22 @@ const LessonContent: FC = () => {
   const date = new Date(Number(searchParams.get('date')))
   const weekDay = getDay(date)
 
-  const { initialLesson, saveLesson, getLessonFilesURL, isEditable } =
-    useLesson(lessonId || '')
+  const {
+    initialLesson,
+    saveLesson,
+    getLessonTime,
+    getLessonFilesURL,
+    isEditable
+  } = useLesson(lessonId || '')
+
+  const { start, end } = getLessonTime()
 
   const [name, setName] = useState(initialLesson?.name || '')
   const [teacher, setTeacher] = useState(initialLesson?.teacher || '')
   const [location, setLocation] = useState(initialLesson?.location || '')
   const [time, setTime] = useState({
-    start: initialLesson?.start || '08:30',
-    end: initialLesson?.end || '09:15'
+    start: initialLesson?.start || start,
+    end: initialLesson?.end || end
   })
   const [homework, setHomework] = useState(
     initialLesson?.homework?.[date.toISOString()] || ''
@@ -33,9 +44,10 @@ const LessonContent: FC = () => {
 
   const [existingFilesURL, setExistingFilesURL] = useState<string[]>([])
   const [attachedFiles, setAttachedFiles] = useState<File[]>([])
-  const attachedFilesURL = attachedFiles.map((file) => {
-    return URL.createObjectURL(file)
-  })
+  const attachedFilesURL = useMemo(
+    () => filesToURLs(attachedFiles),
+    [attachedFiles]
+  )
   const filesURL = [...existingFilesURL, ...attachedFilesURL]
 
   useEffect(() => {
@@ -56,26 +68,37 @@ const LessonContent: FC = () => {
     }
   }
 
-  const isChanged = !isEqual(currentLesson, initialLesson)
+  const isContentChanged = !isEqual(currentLesson, initialLesson)
   const isNonUploadedFilesExist = attachedFiles.length > 0
 
-  const { handleUpload, progress: fileUploadProgress } = useUploadFile()
+  const { handleUpload } = useUploadFile()
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleUploadLessonFiles = () => {
-    attachedFiles.forEach(async (file) => await handleUpload(file))
+  const handleUploadLessonFiles = async () => {
+    for (const file of attachedFiles) {
+      await handleUpload(file)
+    }
 
     setExistingFilesURL(filesURL)
     setAttachedFiles([])
   }
 
-  const handleSave = () => {
-    if (isChanged) saveLesson(currentLesson)
-    if (attachedFiles.length > 0) handleUploadLessonFiles()
+  const handleSave = async () => {
+    setIsLoading(true)
+
+    try {
+      if (isContentChanged) await saveLesson(currentLesson)
+      if (attachedFiles.length > 0) await handleUploadLessonFiles()
+    } catch (error) {
+      toastError(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
     <>
-      <div className='h-full flex-auto overflow-y-auto overflow-x-hidden p-4 pt-6'>
+      <ModalContent className='pt-6'>
         <Input
           type='text'
           editable={isEditable}
@@ -117,10 +140,13 @@ const LessonContent: FC = () => {
           )}
           {filesURL.length > 0 && <LessonAttachments filesURL={filesURL} />}
         </div>
-      </div>
-      {/* {isEditable && isChanged && <LessonFooter handleSave={handleSave} />} */}
-      {isEditable && (isChanged || isNonUploadedFilesExist) && (
-        <LessonFooter handleSave={handleSave} progress={fileUploadProgress} />
+      </ModalContent>
+      {isEditable && (isContentChanged || isNonUploadedFilesExist) && (
+        <ModalFooter className='justify-end'>
+          <Button onClick={handleSave} isLoading={isLoading}>
+            Сохранить
+          </Button>
+        </ModalFooter>
       )}
     </>
   )

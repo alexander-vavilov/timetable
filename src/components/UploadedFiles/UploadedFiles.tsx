@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react'
-import UploadedFile from './UploadedFile'
 import ImagesViewer from '../ImagesViewer/ImageViewer'
+import UploadedFile from './UploadedFile'
 
 interface UploadedFilesProps {
   files: File[]
@@ -10,7 +10,7 @@ interface UploadedFilesProps {
 const UploadedFiles: FC<UploadedFilesProps> = ({ files, setFiles }) => {
   const filesURL = files.map((file) => URL.createObjectURL(file))
 
-  const [viewedImageIndex, setViewedImageIndex] = useState<number>(-1)
+  const [viewedImageIndex, setViewedImageIndex] = useState<number | null>(null)
 
   const handleDeleteFile = (index: number) => {
     const filteredFiles = [...files].filter((_, idx) => index !== idx)
@@ -27,7 +27,7 @@ const UploadedFiles: FC<UploadedFilesProps> = ({ files, setFiles }) => {
           handleDeleteFile={() => handleDeleteFile(index)}
         />
       ))}
-      {viewedImageIndex >= 0 && (
+      {viewedImageIndex !== null && (
         <ImagesViewer
           filesURL={filesURL}
           viewedImageIndex={viewedImageIndex}

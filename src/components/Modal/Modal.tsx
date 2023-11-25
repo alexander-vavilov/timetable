@@ -1,10 +1,10 @@
 import { FC } from 'react'
-import { useKeyDown } from '../hooks/useKeyDown'
-import CloseButton from './CloseButton'
-import Overlay from './Overlay'
-import { ModalProps } from '../types'
+import { useKeyDown } from '../../hooks/useKeyDown'
+import Overlay from '../Overlay'
+import { ModalProps } from '../../types'
 import { createPortal } from 'react-dom'
-import { cn } from '../utils'
+import { cn } from '../../utils'
+import ModalHeader from './ModalHeader'
 
 const defaultStyles =
   'fixed z-20 flex w-full flex-col overflow-hidden bg-white text-black dark:bg-neutral-800 dark:text-white'
@@ -33,10 +33,7 @@ const Modal: FC<ModalProps> = ({
     createPortal(
       <div className='absolute left-0 top-0 z-20 flex h-full w-full items-center justify-center'>
         <div className={cn(defaultStyles, styles[variant], className)}>
-          <div className='flex justify-between border-b border-gray-300 p-4 dark:border-neutral-700 dark:bg-neutral-800'>
-            <span className='text-lg font-medium'>{props.name}</span>
-            <CloseButton onClick={props.handleClose} />
-          </div>
+          <ModalHeader label={props.name} handleClose={props.handleClose} />
           {props.children}
         </div>
         <Overlay onClick={props.handleClose} className='bg-black/20' />

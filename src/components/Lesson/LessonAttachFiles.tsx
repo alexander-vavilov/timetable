@@ -31,7 +31,7 @@ const LessonAttachFiles: FC<LessonAttachFilesProps> = ({
         />
         <label
           htmlFor='file'
-          className='input inline-flex max-w-max cursor-pointer items-center gap-1 rounded-md border-2 pl-1 hover:border-neutral-700 hover:bg-neutral-700'
+          className='input inline-flex max-w-max cursor-pointer items-center gap-1 rounded-md border-2 pl-1 hover:border-gray-200 hover:bg-gray-200 hover:dark:border-neutral-700 hover:dark:bg-neutral-700'
         >
           <MdAttachFile size={20} />
           <span>Прикрепить изображения</span>

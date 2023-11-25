@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import Modal from '../Modal'
+import Modal from '../Modal/Modal'
 import { ModalProps } from '../../types'
 import Button from '../Button'
 import { ReactSVG } from 'react-svg'

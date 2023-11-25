@@ -1,5 +1,6 @@
 import { FC, Dispatch, SetStateAction } from 'react'
 import Input from '../Input'
+import { addMinutes, format, parse } from 'date-fns'
 
 type timeType = { start: string; end: string }
 interface LessonTimeInputsProps {
@@ -13,6 +14,18 @@ const LessonTimeInputs: FC<LessonTimeInputsProps> = ({
   setTime,
   isEditable
 }) => {
+  const changeStartTime = (value: string) => {
+    const startTimeDate = parse(value, 'HH:mm', new Date())
+    const endTimeDate = addMinutes(startTimeDate, 45)
+    const endTimeValue = format(endTimeDate, 'HH:mm')
+
+    setTime({ start: value, end: endTimeValue })
+  }
+
+  const changeEndTime = (value: string) => {
+    setTime((prevTime) => ({ ...prevTime, end: value }))
+  }
+
   return (
     <div className='flex max-w-[140px] flex-col gap-2'>
       <div className='flex justify-between gap-2'>
@@ -22,12 +35,7 @@ const LessonTimeInputs: FC<LessonTimeInputsProps> = ({
           editable={isEditable}
           styleVariant='time'
           value={time.start}
-          onChange={(e) =>
-            setTime((prevTime) => ({
-              ...prevTime,
-              start: e.target.value
-            }))
-          }
+          onChange={(e) => changeStartTime(e.target.value)}
         />
       </div>
       <div className='flex justify-between gap-2'>
@@ -37,12 +45,7 @@ const LessonTimeInputs: FC<LessonTimeInputsProps> = ({
           editable={isEditable}
           styleVariant='time'
           value={time.end}
-          onChange={(e) =>
-            setTime((prevTime) => ({
-              ...prevTime,
-              end: e.target.value
-            }))
-          }
+          onChange={(e) => changeEndTime(e.target.value)}
         />
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { FC, ReactNode, createContext, useEffect, useState } from 'react'
-import { collection, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { doc, onSnapshot } from 'firebase/firestore'
 import { useParams } from 'react-router-dom'
 import { db } from '../../firebase'
 import { IScheduleContext } from '../types/contexts'
@@ -20,19 +20,13 @@ export const ScheduleContextProvider: FC<{ children: ReactNode }> = ({
     if (!scheduleId) return
     setIsLoading(true)
 
-    const q = query(
-      collection(db, 'schedules', scheduleId, 'lessons'),
-      orderBy('timestamp')
-    )
-    const unsub = onSnapshot(q, (querySnapshot) => {
-      const lessons: { [key: string]: {} } = {}
-
-      querySnapshot.forEach((doc) => {
-        const { timestamp, ...lesson } = doc.data()
-        lessons[doc.id] = { ...lesson }
-      })
-
-      setLessons(lessons)
+    const docRef = doc(db, 'schedules', scheduleId)
+    const unsub = onSnapshot(docRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        setLessons(docSnapshot.data())
+      } else {
+        setLessons({})
+      }
       setIsLoading(false)
     })
 
