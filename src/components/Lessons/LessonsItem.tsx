@@ -42,7 +42,7 @@ const LessonsItem: FC<LessonsItemProps> = ({ date, ...props }) => {
     }
   }
 
-  const currentHomework = props.homework?.[date.toISOString()]
+  const currentHomework = props.homework?.[date.getTime()]
 
   return (
     <li className='flex w-full items-center transition-[background,_border-color] cursor:hover:bg-gray-100 cursor:hover:dark:bg-neutral-800'>

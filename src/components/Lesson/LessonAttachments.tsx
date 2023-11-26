@@ -1,6 +1,7 @@
 import { FC, useState } from 'react'
 import ImagesViewer from '../ImagesViewer/ImageViewer'
 import TextInfo from '../TextInfo'
+import LessonAttachmentsItem from './LessonAttachmentsItem'
 
 const LessonAttachments: FC<{ filesURL: string[] }> = ({ filesURL }) => {
   const [viewedImageIndex, setViewedImageIndex] = useState<number | null>(null)
@@ -9,14 +10,10 @@ const LessonAttachments: FC<{ filesURL: string[] }> = ({ filesURL }) => {
     <div className='flex flex-col'>
       <div className='flex flex-wrap gap-2'>
         {filesURL.map((fileURL, index) => (
-          <img
+          <LessonAttachmentsItem
             key={fileURL}
-            src={fileURL}
+            fileURL={fileURL}
             onClick={() => setViewedImageIndex(index)}
-            className='h-32 w-32 cursor-pointer overflow-hidden rounded-md object-cover object-center md:h-32 md:w-32'
-            loading='lazy'
-            draggable={false}
-            alt='img'
           />
         ))}
         {viewedImageIndex !== null && (

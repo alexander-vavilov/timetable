@@ -18,11 +18,11 @@ const LessonContent: FC = () => {
   const { lessonId } = useParams()
   const searchParams = useSearchParams()[0]
 
-  const date = new Date(Number(searchParams.get('date')))
-  const weekDay = getDay(date)
+  const unixTime = Number(searchParams.get('date'))
+  const weekDay = getDay(new Date(unixTime))
 
   const {
-    initialLesson,
+    lessonData,
     saveLesson,
     getLessonTime,
     getLessonFilesURL,
@@ -31,15 +31,15 @@ const LessonContent: FC = () => {
 
   const { start, end } = getLessonTime()
 
-  const [name, setName] = useState(initialLesson?.name || '')
-  const [teacher, setTeacher] = useState(initialLesson?.teacher || '')
-  const [location, setLocation] = useState(initialLesson?.location || '')
+  const [name, setName] = useState(lessonData?.name || '')
+  const [teacher, setTeacher] = useState(lessonData?.teacher || '')
+  const [location, setLocation] = useState(lessonData?.location || '')
   const [time, setTime] = useState({
-    start: initialLesson?.start || start,
-    end: initialLesson?.end || end
+    start: lessonData?.start || start,
+    end: lessonData?.end || end
   })
   const [homework, setHomework] = useState(
-    initialLesson?.homework?.[date.toISOString()] || ''
+    lessonData?.homework?.[unixTime] || ''
   )
 
   const [existingFilesURL, setExistingFilesURL] = useState<string[]>([])
@@ -55,7 +55,6 @@ const LessonContent: FC = () => {
   }, [])
 
   const currentLesson = {
-    ...initialLesson,
     name,
     teacher,
     location,
@@ -63,12 +62,12 @@ const LessonContent: FC = () => {
     start: time.start,
     end: time.end,
     homework: {
-      ...initialLesson?.homework,
-      ...(homework && { [date.toISOString()]: homework })
+      ...lessonData?.homework,
+      ...(homework && { [unixTime]: homework })
     }
   }
 
-  const isContentChanged = !isEqual(currentLesson, initialLesson)
+  const isContentChanged = !isEqual(currentLesson, lessonData)
   const isNonUploadedFilesExist = attachedFiles.length > 0
 
   const { handleUpload } = useUploadFile()
@@ -76,10 +75,11 @@ const LessonContent: FC = () => {
 
   const handleUploadLessonFiles = async () => {
     for (const file of attachedFiles) {
-      await handleUpload(file)
+      const downloadURL = await handleUpload(file)
+      if (typeof downloadURL === 'string') {
+        setExistingFilesURL((filesURL) => [...filesURL, downloadURL])
+      }
     }
-
-    setExistingFilesURL(filesURL)
     setAttachedFiles([])
   }
 

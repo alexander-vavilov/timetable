@@ -18,7 +18,7 @@ const useLesson = (id: string) => {
   const weekDay = getDay(date)
 
   const { lessons } = useContext(ScheduleContext) as IScheduleContext
-  const initialLesson = lessons[id]
+  const lessonData = lessons[id]
 
   const isEditable = scheduleId === currentUser?.uid
 
@@ -28,6 +28,7 @@ const useLesson = (id: string) => {
     const lessonFilesPromises = listResult.items.map(
       async (file) => await getDownloadURL(ref(storage, file.fullPath))
     )
+
     return await Promise.all(lessonFilesPromises)
   }
 
@@ -79,7 +80,7 @@ const useLesson = (id: string) => {
     getLessonFilesURL,
     getLessonTime,
     isEditable,
-    initialLesson
+    lessonData
   }
 }
 
