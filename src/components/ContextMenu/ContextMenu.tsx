@@ -1,30 +1,42 @@
 import { ForwardedRef, forwardRef } from 'react'
-import { createPortal } from 'react-dom'
+import { IconType } from 'react-icons'
+import MenuItems from '../Menu/MenuItems'
+import ReactModal from 'react-modal'
 
-const ContextMenu = forwardRef((_, ref: ForwardedRef<HTMLDivElement>) => {
-  const element = document.getElementById('context-menu')
+type itemType = {
+  label: string
+  icon: IconType
+  handler: () => void
+}
 
-  if (!element) return
-  return createPortal(
-    <div
-      ref={ref}
-      className='absolute z-50'
-      onContextMenu={(e) => e.preventDefault()}
+interface ContextMenuProps {
+  items: itemType[]
+  onRequestClose: () => void
+}
+
+const ContextMenu = (
+  { items, onRequestClose }: ContextMenuProps,
+  ref: ForwardedRef<HTMLDivElement>
+) => {
+  return (
+    <ReactModal
+      isOpen
+      className='z-20 h-full w-full bg-transparent'
+      overlayClassName='bg-transparent'
     >
-      <ul className='overflow-hidden rounded-md bg-neutral-900 py-1 shadow-md'>
-        <li className='cursor-pointer px-4 py-1 hover:bg-neutral-800'>
-          some content
-        </li>
-        <li className='cursor-pointer px-4 py-1 hover:bg-neutral-800'>
-          some content
-        </li>
-        <li className='cursor-pointer px-4 py-1 hover:bg-neutral-800'>
-          some content
-        </li>
-      </ul>
-    </div>,
-    element
+      <div
+        ref={ref}
+        className='absolute'
+        onContextMenu={(e) => e.preventDefault()}
+      >
+        <MenuItems
+          handleClose={() => console.log('close')}
+          items={items}
+          styleVariant='shrink'
+        />
+      </div>
+    </ReactModal>
   )
-})
+}
 
-export default ContextMenu
+export default forwardRef(ContextMenu)

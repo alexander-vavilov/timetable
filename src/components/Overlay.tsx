@@ -1,17 +1,22 @@
-import { FC } from 'react'
+import { FC, HTMLAttributes, ReactNode } from 'react'
 import { cn } from '../utils'
 
-interface OverlayProps {
+interface OverlayProps extends HTMLAttributes<HTMLDivElement> {
+  children?: ReactNode
   className?: string
-  onClick?: () => void
 }
 
-const Overlay: FC<OverlayProps> = ({ className, onClick }) => {
+const Overlay: FC<OverlayProps> = ({ children, className, ...props }) => {
   return (
     <div
-      onClick={onClick}
-      className={cn('fixed left-0 top-0 z-10 h-full w-full', className)}
-    />
+      className={cn(
+        'fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black/40',
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
   )
 }
 

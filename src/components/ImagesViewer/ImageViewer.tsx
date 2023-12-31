@@ -1,16 +1,17 @@
 import { Dispatch, FC, SetStateAction, useRef, useState } from 'react'
 import { useGesture } from '@use-gesture/react'
-import { createPortal } from 'react-dom'
 import { AiOutlineDownload, AiOutlineRotateRight } from 'react-icons/ai'
 import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight
 } from 'react-icons/md'
-import { useKeyDown } from '../../hooks/useKeyDown'
 import CloseButton from '../CloseButton'
-import Overlay from '../Overlay'
 import TextInfo from '../TextInfo'
 import Spinner from '../Spinner'
+import ReactModal from 'react-modal'
+import Overlay from '../Overlay'
+import { useKeyDown } from '../../hooks/useKeyDown'
+import Image from '../Image'
 
 interface ImagesViewerProps {
   filesURL: string[]
@@ -23,7 +24,6 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
   viewedImageIndex,
   setViewedImageIndex
 }) => {
-  const element = document.getElementById('modal')
   const imageRef = useRef<HTMLImageElement>(null)
 
   const viewedImageURL = filesURL[viewedImageIndex]
@@ -82,9 +82,15 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
     if (e.key === 'ArrowRight') next()
   })
 
-  if (!element) return
-  return createPortal(
-    <div className='absolute left-0 top-0 z-20 flex h-full w-full items-center justify-center overflow-hidden'>
+  return (
+    <ReactModal
+      isOpen={viewedImageIndex !== null}
+      onRequestClose={handleClose}
+      className='fixed left-0 top-0 z-20 flex h-full w-full items-center justify-center outline-none'
+      overlayClassName='bg-transparent'
+      shouldCloseOnOverlayClick={false}
+      ariaHideApp={false}
+    >
       {isLoading && (
         <div className='absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2'>
           <Spinner size={30} />
@@ -145,9 +151,8 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
           </button>
         )}
       </div>
-      <Overlay onClick={handleClose} className='bg-black/60' />
-    </div>,
-    element
+      <Overlay onClick={handleClose} />
+    </ReactModal>
   )
 }
 

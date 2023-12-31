@@ -3,10 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom'
 import Modal from '../Modal/Modal'
 import { IScheduleContext } from '../../types/contexts'
 import { ScheduleContext } from '../../contexts/ScheduleContext'
-import LessonContent from '../Lesson/LessonContent'
-import LessonSkeleton from '../Lesson/LessonSkeleton'
+import LessonView from '../LessonView'
+import LessonViewSkeleton from '../LessonView/LessonViewSkeleton'
 
-const LessonModal: FC = () => {
+const LessonViewModal: FC = () => {
   const { scheduleId } = useParams()
 
   const navigate = useNavigate()
@@ -16,9 +16,9 @@ const LessonModal: FC = () => {
 
   return (
     <Modal handleClose={handleClose} name='Детали'>
-      {isLoading ? <LessonSkeleton /> : <LessonContent />}
+      {isLoading ? <LessonViewSkeleton /> : <LessonView />}
     </Modal>
   )
 }
 
-export default LessonModal
+export default LessonViewModal

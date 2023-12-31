@@ -10,6 +10,7 @@ interface MenuItemProps {
   warning?: boolean
   permissions?: boolean
   handleClose: () => void
+  styleVariant: 'standard' | 'shrink'
 }
 
 const MenuItem: FC<MenuItemProps> = ({
@@ -18,7 +19,8 @@ const MenuItem: FC<MenuItemProps> = ({
   handler,
   warning = false,
   permissions = true,
-  handleClose
+  handleClose,
+  styleVariant
 }) => {
   const [isWarningOpen, setIsWarningOpen] = useState(false)
 
@@ -36,25 +38,29 @@ const MenuItem: FC<MenuItemProps> = ({
   if (!permissions) return
   return (
     <li
-      className={cn(
-        'cursor-pointer rounded-md transition-background',
-        warning
-          ? 'hover:bg-red-400/10'
-          : 'hover:bg-gray-200/50 hover:dark:bg-neutral-700/70'
-      )}
+      className={cn('rounded-md transition-background', {
+        'hover:bg-red-400/10': warning,
+        'hover:bg-gray-200/50 hover:dark:bg-neutral-700/70': !warning
+      })}
     >
       <button
         onClick={handleClick}
-        className={cn('w-full p-2', warning && 'text-red-500')}
+        className={cn('w-full cursor-pointer', {
+          'p-2': styleVariant === 'standard',
+          'p-1': styleVariant === 'shrink',
+          'text-red-500': warning
+        })}
       >
         <div className='flex items-center gap-2'>
           <div
-            className={cn(
-              'flex items-center justify-center rounded-full p-2 shadow-sm dark:shadow-none',
-              warning
-                ? 'bg-red-400/20 text-red-500'
-                : 'bg-gray-300/50 text-gray-800 dark:bg-neutral-600 dark:text-white'
-            )}
+            className={cn({
+              'flex items-center justify-center rounded-full p-2 shadow-sm dark:shadow-none':
+                styleVariant === 'standard',
+              'bg-red-400/20 text-red-500':
+                styleVariant === 'standard' && warning,
+              'bg-gray-300/50 text-gray-800 dark:bg-neutral-600 dark:text-white':
+                styleVariant === 'standard' && !warning
+            })}
           >
             <Icon size={20} />
           </div>

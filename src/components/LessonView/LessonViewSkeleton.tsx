@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-const LessonSkeleton: FC = () => {
+const LessonViewSkeleton: FC = () => {
   return (
     <div className='p-4'>
       <div className='flex flex-col gap-1'>
@@ -31,4 +31,4 @@ const LessonSkeleton: FC = () => {
   )
 }
 
-export default LessonSkeleton
+export default LessonViewSkeleton

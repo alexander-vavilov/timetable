@@ -1,35 +1,34 @@
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
 import { getDay } from 'date-fns'
 import isEqual from 'lodash.isequal'
 import useLesson from '../../hooks/useLesson'
-import useUploadFile from '../../hooks/useUploadFile'
 import { toastError } from '../../toast'
 import Input from '../Input'
-import LessonAttachFiles from './LessonAttachFiles'
-import LessonAttachments from './LessonAttachments'
-import LessonTimeInputs from './LessonTimeInputs'
+import LessonViewAttachFiles from './LessonViewAttachFiles'
+import LessonViewAttachments from './LessonViewAttachments'
+import LessonViewTimeInputs from './LessonViewTimeInputs'
 import ModalFooter from '../Modal/ModalFooter'
 import Button from '../Button'
-import { filesToURLs } from '../../utils'
 import ModalContent from '../Modal/ModalContent'
+import LessonViewUnprocessedFiles from './LessonViewUnprocessedFiles'
+import invariant from 'tiny-invariant'
+import useTime from './useTime'
+import useUploadFiles from './useUploadFiles'
+import useExtractFilesURL from './useExtractFilesURL'
 
-const LessonContent: FC = () => {
+const LessonView: FC = () => {
   const { lessonId } = useParams()
   const searchParams = useSearchParams()[0]
+  invariant(lessonId, 'Lesson id needed.')
 
   const unixTime = Number(searchParams.get('date'))
   const weekDay = getDay(new Date(unixTime))
 
-  const {
-    lessonData,
-    saveLesson,
-    getLessonTime,
-    getLessonFilesURL,
-    isEditable
-  } = useLesson(lessonId || '')
-
-  const { start, end } = getLessonTime()
+  const { lessonData, saveLesson, isEditable } = useLesson(lessonId)
+  const extractFilesURL = useExtractFilesURL()
+  const handleUploadLessonFiles = useUploadFiles()
+  const { start, end } = useTime()
 
   const [name, setName] = useState(lessonData?.name || '')
   const [teacher, setTeacher] = useState(lessonData?.teacher || '')
@@ -43,15 +42,10 @@ const LessonContent: FC = () => {
   )
 
   const [existingFilesURL, setExistingFilesURL] = useState<string[]>([])
-  const [attachedFiles, setAttachedFiles] = useState<File[]>([])
-  const attachedFilesURL = useMemo(
-    () => filesToURLs(attachedFiles),
-    [attachedFiles]
-  )
-  const filesURL = [...existingFilesURL, ...attachedFilesURL]
+  const [unprocessedFiles, setUnprocessedFiles] = useState<File[]>([])
 
   useEffect(() => {
-    getLessonFilesURL().then(setExistingFilesURL)
+    extractFilesURL().then(setExistingFilesURL)
   }, [])
 
   const currentLesson = {
@@ -68,27 +62,20 @@ const LessonContent: FC = () => {
   }
 
   const isContentChanged = !isEqual(currentLesson, lessonData)
-  const isNonUploadedFilesExist = attachedFiles.length > 0
-
-  const { handleUpload } = useUploadFile()
   const [isLoading, setIsLoading] = useState(false)
-
-  const handleUploadLessonFiles = async () => {
-    for (const file of attachedFiles) {
-      const downloadURL = await handleUpload(file)
-      if (typeof downloadURL === 'string') {
-        setExistingFilesURL((filesURL) => [...filesURL, downloadURL])
-      }
-    }
-    setAttachedFiles([])
-  }
 
   const handleSave = async () => {
     setIsLoading(true)
 
     try {
       if (isContentChanged) await saveLesson(currentLesson)
-      if (attachedFiles.length > 0) await handleUploadLessonFiles()
+
+      if (unprocessedFiles.length > 0) {
+        await handleUploadLessonFiles(unprocessedFiles)
+
+        extractFilesURL().then(setExistingFilesURL)
+        setUnprocessedFiles([])
+      }
     } catch (error) {
       toastError(error)
     } finally {
@@ -123,7 +110,7 @@ const LessonContent: FC = () => {
             onChange={(e) => setLocation(e.target.value)}
             placeholder='кабинет'
           />
-          <LessonTimeInputs
+          <LessonViewTimeInputs
             time={time}
             setTime={setTime}
             isEditable={isEditable}
@@ -136,12 +123,20 @@ const LessonContent: FC = () => {
             placeholder='Домашнее задание'
           />
           {isEditable && (
-            <LessonAttachFiles setAttachedFiles={setAttachedFiles} />
+            <LessonViewAttachFiles setUnprocessedFiles={setUnprocessedFiles} />
           )}
-          {filesURL.length > 0 && <LessonAttachments filesURL={filesURL} />}
+          {unprocessedFiles.length > 0 && (
+            <LessonViewUnprocessedFiles
+              files={unprocessedFiles}
+              setUnprocessedFiles={setUnprocessedFiles}
+            />
+          )}
+          {existingFilesURL.length > 0 && (
+            <LessonViewAttachments filesURL={existingFilesURL} />
+          )}
         </div>
       </ModalContent>
-      {isEditable && (isContentChanged || isNonUploadedFilesExist) && (
+      {isEditable && (isContentChanged || unprocessedFiles.length > 0) && (
         <ModalFooter className='justify-end'>
           <Button onClick={handleSave} isLoading={isLoading}>
             Сохранить
@@ -152,4 +147,4 @@ const LessonContent: FC = () => {
   )
 }
 
-export default LessonContent
+export default LessonView

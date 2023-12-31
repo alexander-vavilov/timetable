@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { MdClose } from 'react-icons/md'
 
-const CloseButton: FC<{ onClick: () => void }> = ({ onClick }) => {
+const CloseButton: FC<{ onClick?: () => void }> = ({ onClick }) => {
   return (
     <button
       onClick={onClick}

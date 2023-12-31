@@ -3,13 +3,13 @@ import Input from '../Input'
 import { addMinutes, format, parse } from 'date-fns'
 
 type timeType = { start: string; end: string }
-interface LessonTimeInputsProps {
+interface LessonViewTimeInputsProps {
   time: timeType
   setTime: Dispatch<SetStateAction<timeType>>
   isEditable: boolean
 }
 
-const LessonTimeInputs: FC<LessonTimeInputsProps> = ({
+const LessonViewTimeInputs: FC<LessonViewTimeInputsProps> = ({
   time,
   setTime,
   isEditable
@@ -52,4 +52,4 @@ const LessonTimeInputs: FC<LessonTimeInputsProps> = ({
   )
 }
 
-export default LessonTimeInputs
+export default LessonViewTimeInputs

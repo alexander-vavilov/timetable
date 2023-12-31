@@ -1,5 +1,4 @@
-import { MouseEvent, useEffect, useState } from 'react'
-import { useClickAway } from './useClickAway'
+import { MouseEvent, useEffect, useRef, useState } from 'react'
 
 type clickPositionType = { x: number | null; y: number | null }
 
@@ -9,7 +8,7 @@ const useContextMenu = () => {
     y: null
   })
   const [isOpen, setIsOpen] = useState(false)
-  const ref = useClickAway(() => setIsOpen(false))
+  const ref = useRef<HTMLDivElement | null>(null)
 
   const open = (e: MouseEvent) => {
     e.preventDefault()
@@ -18,6 +17,8 @@ const useContextMenu = () => {
     setClickPosition({ x: pageX, y: pageY })
     setIsOpen(true)
   }
+
+  const close = () => setIsOpen(false)
 
   const calculatePosition = () => {
     if (!ref.current || !clickPosition.x || !clickPosition.y) return
@@ -47,7 +48,7 @@ const useContextMenu = () => {
     }
   })
 
-  return { isOpen, ref, open }
+  return { isOpen, ref, open, close }
 }
 
 export default useContextMenu
