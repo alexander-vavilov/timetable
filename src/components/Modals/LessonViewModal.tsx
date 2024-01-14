@@ -7,18 +7,18 @@ import LessonView from '../LessonView'
 import LessonViewSkeleton from '../LessonView/LessonViewSkeleton'
 
 const LessonViewModal: FC = () => {
-  const { scheduleId } = useParams()
+	const { scheduleId } = useParams()
 
-  const navigate = useNavigate()
-  const handleClose = () => navigate(`/schedule/${scheduleId}`)
+	const navigate = useNavigate()
+	const handleClose = () => navigate(`/schedule/${scheduleId}`)
 
-  const { isLoading } = useContext(ScheduleContext) as IScheduleContext
+	const { isLoading } = useContext(ScheduleContext) as IScheduleContext
 
-  return (
-    <Modal handleClose={handleClose} name='Детали'>
-      {isLoading ? <LessonViewSkeleton /> : <LessonView />}
-    </Modal>
-  )
+	return (
+		<Modal handleClose={handleClose} name='Детали'>
+			{isLoading ? <LessonViewSkeleton /> : <LessonView />}
+		</Modal>
+	)
 }
 
 export default LessonViewModal
