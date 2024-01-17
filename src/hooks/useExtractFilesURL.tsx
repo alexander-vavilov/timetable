@@ -1,14 +1,14 @@
-import { getDownloadURL, listAll, ref } from 'firebase/storage'
-import { storage } from '../../../firebase'
-import { useParams } from 'react-router-dom'
+import {
+	StorageReference,
+	getDownloadURL,
+	listAll,
+	ref,
+} from 'firebase/storage'
+import { storage } from '../../firebase'
 
 const useExtractFilesURL = () => {
-	const { scheduleId, lessonId } = useParams()
-
-	const extractFilesURL = async () => {
+	const extractFilesURL = async (listRef: StorageReference) => {
 		const filesURLArr: string[] = []
-
-		const listRef = ref(storage, `schedules/${scheduleId}/${lessonId}`)
 		const listResult = await listAll(listRef)
 
 		const downloadURLs = await Promise.all(

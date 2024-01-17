@@ -8,9 +8,16 @@ import { cn } from '../../utils'
 
 interface WarningModalProps extends ModalProps {
 	confirmHandler: () => void
+	message?: string
+	confirmButtonLabel: string
 }
 
-const WarningModal: FC<WarningModalProps> = ({ confirmHandler, ...props }) => {
+const WarningModal: FC<WarningModalProps> = ({
+	confirmHandler,
+	message,
+	confirmButtonLabel,
+	...props
+}) => {
 	const confirm = () => {
 		confirmHandler()
 		props.handleClose()
@@ -24,17 +31,19 @@ const WarningModal: FC<WarningModalProps> = ({ confirmHandler, ...props }) => {
 		>
 			<div className='p-4'>
 				<div className='flex items-end'>
-					<span className='self-start pb-4'>
-						Вы уверены, что хотите {props.name}?
+					<span className='self-start pb-6'>
+						{message
+							? message
+							: `Вы уверены, что хотите ${props.name.toLowerCase()}?`}
 					</span>
-					<ReactSVG src={CatSvg} className='w-24' />
+					<ReactSVG src={CatSvg} className='max-w-24 w-full' />
 				</div>
 				<div className='flex items-center gap-4'>
 					<Button
 						onClick={confirm}
 						className='flex-auto bg-red-600 hover:bg-red-700'
 					>
-						Удалить
+						{confirmButtonLabel}
 					</Button>
 					<Button
 						onClick={props.handleClose}

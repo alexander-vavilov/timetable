@@ -7,44 +7,44 @@ import { IScheduleContext } from '../types/contexts'
 export const ScheduleContext = createContext<IScheduleContext | null>(null)
 
 export const ScheduleContextProvider: FC<{ children: ReactNode }> = ({
-  children
+	children,
 }) => {
-  const [lessons, setLessons] = useState({})
-  const [isEditMode, setIsEditMode] = useState(false)
-  const [date, setDate] = useState(new Date())
-  const [isLoading, setIsLoading] = useState(true)
+	const [lessons, setLessons] = useState({})
+	const [isEditMode, setIsEditMode] = useState(false)
+	const [date, setDate] = useState(new Date())
+	const [isLoading, setIsLoading] = useState(true)
 
-  const { scheduleId } = useParams()
+	const { scheduleId } = useParams()
 
-  useEffect(() => {
-    if (!scheduleId) return
-    setIsLoading(true)
+	useEffect(() => {
+		if (!scheduleId) return
+		setIsLoading(true)
 
-    const docRef = doc(db, 'schedules', scheduleId)
-    const unsub = onSnapshot(docRef, (docSnapshot) => {
-      if (docSnapshot.exists()) {
-        setLessons(docSnapshot.data())
-      } else {
-        setLessons({})
-      }
-      setIsLoading(false)
-    })
+		const docRef = doc(db, 'schedules', scheduleId)
+		const unsub = onSnapshot(docRef, docSnapshot => {
+			if (docSnapshot.exists()) {
+				setLessons(docSnapshot.data())
+			} else {
+				setLessons({})
+			}
+			setIsLoading(false)
+		})
 
-    return () => unsub()
-  }, [scheduleId])
+		return () => unsub()
+	}, [scheduleId])
 
-  const value = {
-    lessons,
-    isLoading,
-    isEditMode,
-    setIsEditMode,
-    date,
-    setDate
-  }
+	const value = {
+		lessons,
+		isLoading,
+		isEditMode,
+		setIsEditMode,
+		date,
+		setDate,
+	}
 
-  return (
-    <ScheduleContext.Provider value={value}>
-      {children}
-    </ScheduleContext.Provider>
-  )
+	return (
+		<ScheduleContext.Provider value={value}>
+			{children}
+		</ScheduleContext.Provider>
+	)
 }

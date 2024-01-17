@@ -8,11 +8,12 @@ import { UserContext } from '../contexts/UserContext'
 import { Route, Routes, useParams } from 'react-router-dom'
 import LessonsItemSkeleton from '../components/Lessons/LessonsItemSkeleton'
 import TextInfo from '../components/TextInfo'
-import LessonViewModal from '../components/Modals/LessonViewModal'
 import ShareModal from '../components/Modals/ShareModal'
 import ScheduleMessage from '../components/Schedule/ScheduleMessage'
 import ThoughtfulCatSVG from '../assets/thoughtful-cat.svg'
 import CryingCatSvg from '../assets/crying-cat.svg'
+import LessonViewModal from '../components/Modals/LessonViewModal'
+import ScheduleCreateButton from '../components/Schedule/ScheduleCreateButton'
 
 const scheduleMessages = {
 	empty: {
@@ -68,7 +69,7 @@ const Schedule: FC = () => {
 					) : (
 						<div className='flex-auto'>
 							{Object.keys(lessons).length === 0 && !isEditMode ? (
-								<div className='flex h-full w-full flex-auto items-center justify-center'>
+								<div className='flex flex-col h-full w-full flex-auto items-center justify-center gap-2'>
 									<ScheduleMessage
 										image={
 											isOwner
@@ -81,6 +82,7 @@ const Schedule: FC = () => {
 												: scheduleMessages.notfound.message
 										}
 									/>
+									<ScheduleCreateButton isOwner={isOwner} />
 								</div>
 							) : (
 								<ScheduleDays days={weekDays} />
