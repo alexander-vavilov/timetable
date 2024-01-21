@@ -62,7 +62,6 @@ const LessonViewModal: FC = () => {
             editable={isOwner}
             value={formState.teacher}
             onChange={(e) => formState.setTeacher(e.target.value)}
-            className="text-3xl"
             placeholder="учитель"
           />
           <Input

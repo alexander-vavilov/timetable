@@ -32,12 +32,12 @@ const WarningModal: FC<WarningModalProps> = ({
     >
       <div className="p-4">
         <div className="flex items-end">
-          <span className="self-start pb-6">
+          <span className="self-start pb-8">
             {message
               ? message
               : `Вы уверены, что хотите ${props.name.toLowerCase()}?`}
           </span>
-          <ReactSVG src={CatSvg} className="w-full max-w-24" />
+          <ReactSVG src={CatSvg} className="w-full max-w-20" />
         </div>
         <div className="flex items-center gap-4">
           <Button
