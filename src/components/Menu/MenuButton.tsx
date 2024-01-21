@@ -1,4 +1,5 @@
 import { FC } from 'react'
+
 import { cn } from '../../utils'
 
 interface MenuButtonProps {
@@ -8,8 +9,8 @@ interface MenuButtonProps {
 
 const MenuButton: FC<MenuButtonProps> = ({ onClick, isOpen }) => {
   return (
-    <button className='p-1.5' onClick={onClick}>
-      <div className='relative h-4 w-6'>
+    <button className="p-1.5" onClick={onClick}>
+      <div className="relative h-4 w-6">
         <div
           className={cn(
             'absolute top-0 h-0.5 w-full rounded-full bg-black transition-all duration-300 dark:bg-white',

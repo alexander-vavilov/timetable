@@ -1,7 +1,8 @@
 import { FC } from 'react'
 import { IconType } from 'react-icons'
-import MenuItem from './MenuItem'
+
 import { cn } from '../../utils'
+import MenuItem from './MenuItem'
 
 type menuItem = {
   label: string

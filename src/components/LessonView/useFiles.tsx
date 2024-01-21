@@ -1,50 +1,51 @@
+import { ref } from 'firebase/storage'
 import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+
+import { storage } from '../../../firebase'
 import useExtractFilesURL from '../../hooks/useExtractFilesURL'
 import useUploadFile from '../../hooks/useUploadFile'
-import { useParams } from 'react-router-dom'
-import { ref } from 'firebase/storage'
-import { storage } from '../../../firebase'
 
 const useFiles = () => {
-	const [existingFilesURL, setExistingFilesURL] = useState<string[]>([])
-	const [unprocessedFiles, setUnprocessedFiles] = useState<File[]>([])
+  const [existingFilesURL, setExistingFilesURL] = useState<string[]>([])
+  const [unprocessedFiles, setUnprocessedFiles] = useState<File[]>([])
 
-	const { scheduleId, lessonId } = useParams()
+  const { scheduleId, lessonId } = useParams()
 
-	const extractFilesURL = useExtractFilesURL()
+  const extractFilesURL = useExtractFilesURL()
 
-	const fetch = () => {
-		const listRef = ref(storage, `schedules/${scheduleId}/${lessonId}`)
-		extractFilesURL(listRef).then(setExistingFilesURL)
-	}
+  const fetch = () => {
+    const listRef = ref(storage, `schedules/${scheduleId}/${lessonId}`)
+    extractFilesURL(listRef).then(setExistingFilesURL)
+  }
 
-	const { handleUpload } = useUploadFile()
+  const { handleUpload } = useUploadFile()
 
-	const processFiles = async () => {
-		const uploadedFilesURL: string[] = []
+  const processFiles = async (files: File[] | FileList = unprocessedFiles) => {
+    const uploadedFilesURL: string[] = []
 
-		for (const file of unprocessedFiles) {
-			const downloadURL = await handleUpload(file)
+    for (const file of [...files]) {
+      const downloadURL = await handleUpload(file)
 
-			if (typeof downloadURL === 'string') {
-				uploadedFilesURL.push(downloadURL)
-			}
-		}
+      if (typeof downloadURL === 'string') {
+        uploadedFilesURL.push(downloadURL)
+      }
+    }
 
-		fetch()
-		setUnprocessedFiles([])
-	}
+    fetch()
+    setUnprocessedFiles([])
+  }
 
-	useEffect(() => {
-		fetch()
-	}, [])
+  useEffect(() => {
+    fetch()
+  }, [])
 
-	return {
-		existingFilesURL,
-		unprocessedFiles,
-		setUnprocessedFiles,
-		processFiles,
-	}
+  return {
+    existingFilesURL,
+    unprocessedFiles,
+    setUnprocessedFiles,
+    processFiles
+  }
 }
 
 export default useFiles

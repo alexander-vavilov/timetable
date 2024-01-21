@@ -1,4 +1,5 @@
-import { HTMLAttributes, forwardRef, useState } from 'react'
+import { forwardRef, HTMLAttributes, useState } from 'react'
+
 import { cn } from '../utils'
 import Spinner from './Spinner'
 
@@ -36,11 +37,11 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(
             classNames?.imageElement
           )}
           draggable={false}
-          alt='img'
+          alt="img"
           {...props}
         />
         {isLoading && (
-          <div className='absolute left-0 top-0 flex h-full w-full items-center justify-center bg-neutral-700'>
+          <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-neutral-700">
             <Spinner />
           </div>
         )}

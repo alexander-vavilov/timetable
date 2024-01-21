@@ -1,4 +1,5 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react'
+
 import ImagesViewer from '../ImagesViewer/ImageViewer'
 import UploadedFile from './UploadedFile'
 
@@ -18,7 +19,7 @@ const UploadedFiles: FC<UploadedFilesProps> = ({ files, setFiles }) => {
   }
 
   return (
-    <div className='flex flex-wrap gap-2'>
+    <div className="flex flex-wrap gap-2">
       {files.map((file, index) => (
         <UploadedFile
           key={file.name}

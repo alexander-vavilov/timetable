@@ -7,7 +7,7 @@ const FormLink: FC<{ type: 'register' | 'login' }> = ({ type }) => {
       {type === 'register'
         ? 'Уже зарегистрированы? '
         : 'Еще не зарегистрированы? '}
-      <span className='text-green-500 hover:underline'>
+      <span className="text-green-500 hover:underline">
         {type === 'register' ? 'Войти' : 'Создать аккаунт'}
       </span>
     </Link>

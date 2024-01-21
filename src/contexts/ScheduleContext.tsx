@@ -1,50 +1,63 @@
-import { FC, ReactNode, createContext, useEffect, useState } from 'react'
 import { doc, onSnapshot } from 'firebase/firestore'
+import {
+  createContext,
+  FC,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState
+} from 'react'
 import { useParams } from 'react-router-dom'
+
 import { db } from '../../firebase'
-import { IScheduleContext } from '../types/contexts'
+import { IScheduleContext, IUserContext } from '../types/contexts'
+import { UserContext } from './UserContext'
 
 export const ScheduleContext = createContext<IScheduleContext | null>(null)
 
 export const ScheduleContextProvider: FC<{ children: ReactNode }> = ({
-	children,
+  children
 }) => {
-	const [lessons, setLessons] = useState({})
-	const [isEditMode, setIsEditMode] = useState(false)
-	const [date, setDate] = useState(new Date())
-	const [isLoading, setIsLoading] = useState(true)
+  const [lessons, setLessons] = useState({})
+  const [isEditMode, setIsEditMode] = useState(false)
+  const [date, setDate] = useState(new Date())
+  const [isLoading, setIsLoading] = useState(true)
 
-	const { scheduleId } = useParams()
+  const { scheduleId } = useParams()
 
-	useEffect(() => {
-		if (!scheduleId) return
-		setIsLoading(true)
+  const { currentUser } = useContext(UserContext) as IUserContext
+  const isOwner = scheduleId === currentUser?.uid
 
-		const docRef = doc(db, 'schedules', scheduleId)
-		const unsub = onSnapshot(docRef, docSnapshot => {
-			if (docSnapshot.exists()) {
-				setLessons(docSnapshot.data())
-			} else {
-				setLessons({})
-			}
-			setIsLoading(false)
-		})
+  useEffect(() => {
+    if (!scheduleId) return
+    setIsLoading(true)
 
-		return () => unsub()
-	}, [scheduleId])
+    const docRef = doc(db, 'schedules', scheduleId)
+    const unsub = onSnapshot(docRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        setLessons(docSnapshot.data())
+      } else {
+        setLessons({})
+      }
+      setIsLoading(false)
+    })
 
-	const value = {
-		lessons,
-		isLoading,
-		isEditMode,
-		setIsEditMode,
-		date,
-		setDate,
-	}
+    return () => unsub()
+  }, [scheduleId])
 
-	return (
-		<ScheduleContext.Provider value={value}>
-			{children}
-		</ScheduleContext.Provider>
-	)
+  const value = {
+    lessons,
+    isLoading,
+    isOwner,
+    isEditMode,
+    setIsEditMode,
+    date,
+    setDate
+  }
+
+  return (
+    <ScheduleContext.Provider value={value}>
+      {children}
+    </ScheduleContext.Provider>
+  )
 }

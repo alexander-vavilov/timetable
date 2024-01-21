@@ -1,17 +1,17 @@
-import { Dispatch, FC, SetStateAction, useRef, useState } from 'react'
 import { useGesture } from '@use-gesture/react'
+import { Dispatch, FC, SetStateAction, useRef, useState } from 'react'
 import { AiOutlineDownload, AiOutlineRotateRight } from 'react-icons/ai'
 import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight
 } from 'react-icons/md'
-import CloseButton from '../CloseButton'
-import TextInfo from '../TextInfo'
-import Spinner from '../Spinner'
 import ReactModal from 'react-modal'
-import Overlay from '../Overlay'
+
 import { useKeyDown } from '../../hooks/useKeyDown'
-import Image from '../Image'
+import CloseButton from '../CloseButton'
+import Overlay from '../Overlay'
+import Spinner from '../Spinner'
+import TextInfo from '../TextInfo'
 
 interface ImagesViewerProps {
   filesURL: string[]
@@ -40,10 +40,10 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
       onPinch: ({ offset: [scale] }) => {
         setCrop((crop) => ({ ...crop, scale }))
       },
-      onWheel: ({ active, ctrlKey, direction: [_, direction] }) => {
+      onWheel: ({ active, ctrlKey, direction }) => {
         if (active && !ctrlKey) {
-          if (direction < 0) previous()
-          if (direction > 0) next()
+          if (direction[1] < 0) previous()
+          if (direction[1] > 0) next()
         }
       }
     },
@@ -86,13 +86,13 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
     <ReactModal
       isOpen={viewedImageIndex !== null}
       onRequestClose={handleClose}
-      className='fixed left-0 top-0 z-20 flex h-full w-full items-center justify-center outline-none'
-      overlayClassName='bg-transparent'
+      className="fixed left-0 top-0 z-20 flex h-full w-full items-center justify-center outline-none"
+      overlayClassName="bg-transparent"
       shouldCloseOnOverlayClick={false}
       ariaHideApp={false}
     >
       {isLoading && (
-        <div className='absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2'>
+        <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
           <Spinner size={30} />
         </div>
       )}
@@ -100,7 +100,7 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
         ref={imageRef}
         src={viewedImageURL}
         onLoad={() => setIsLoading(false)}
-        className='relative z-20 max-h-[80%] max-w-full cursor-move touch-none select-none'
+        className="relative z-20 max-h-[80%] max-w-full cursor-move touch-none select-none"
         draggable={false}
         style={{
           left: crop.x,
@@ -108,34 +108,34 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
           transform: `scale(${crop.scale}) rotate(${crop.rotate}deg)`
         }}
       />
-      <div className='absolute right-4 top-4 z-30'>
+      <div className="absolute right-4 top-4 z-30">
         <CloseButton onClick={handleClose} />
       </div>
-      <div className='absolute bottom-4 right-4 z-30 flex'>
-        <button onClick={rotate} className='image-viewer-button'>
+      <div className="absolute bottom-4 right-4 z-30 flex">
+        <button onClick={rotate} className="image-viewer-button">
           <AiOutlineRotateRight size={24} />
         </button>
         <a
           href={viewedImageURL}
-          target='_blank'
+          target="_blank"
           download
-          className='image-viewer-button'
+          className="image-viewer-button"
         >
           <AiOutlineDownload size={24} />
         </a>
       </div>
-      <div className='absolute bottom-4 left-4 z-20'>
-        <TextInfo className='pointer-events-none select-none font-medium'>
+      <div className="absolute bottom-4 left-4 z-20">
+        <TextInfo className="pointer-events-none select-none font-medium">
           Изображение {viewedImageIndex + 1} из {filesURL.length}
         </TextInfo>
       </div>
-      <div className='z-20'>
+      <div className="z-20">
         {!isFirstItem && (
           <button
             onClick={previous}
-            className='group absolute left-0 top-0 h-full px-6'
+            className="group absolute left-0 top-0 h-full px-6"
           >
-            <div className='image-viewer-button p-1 group-hover:bg-neutral-600/30 group-hover:text-white'>
+            <div className="image-viewer-button p-1 group-hover:bg-neutral-600/30 group-hover:text-white">
               <MdOutlineKeyboardArrowLeft size={32} />
             </div>
           </button>
@@ -143,9 +143,9 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
         {!isLastItem && (
           <button
             onClick={next}
-            className='group absolute right-0 top-0 h-full px-6'
+            className="group absolute right-0 top-0 h-full px-6"
           >
-            <div className='image-viewer-button p-1 group-hover:bg-neutral-600/30 group-hover:text-white'>
+            <div className="image-viewer-button p-1 group-hover:bg-neutral-600/30 group-hover:text-white">
               <MdOutlineKeyboardArrowRight size={32} />
             </div>
           </button>

@@ -1,14 +1,15 @@
 import { FC } from 'react'
-import Header from './Header'
 import { Outlet } from 'react-router-dom'
+
 import { ScheduleContextProvider } from '../contexts/ScheduleContext'
+import Header from './Header'
 import PrivateRoute from './PrivateRoute'
 
 const Layout: FC = () => {
   return (
     <ScheduleContextProvider>
       <PrivateRoute>
-        <div className='flex h-full flex-col overflow-hidden'>
+        <div className="flex h-full flex-col overflow-hidden">
           <Header />
           <Outlet />
         </div>

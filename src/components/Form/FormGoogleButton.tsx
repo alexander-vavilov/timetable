@@ -1,9 +1,10 @@
-import { FC, ButtonHTMLAttributes } from 'react'
-import Button from '../Button'
+import { signInWithPopup, UserCredential } from 'firebase/auth'
+import { ButtonHTMLAttributes, FC } from 'react'
 import { FcGoogle } from 'react-icons/fc'
-import { UserCredential, signInWithPopup } from 'firebase/auth'
+
 import { auth, provider } from '../../../firebase'
 import { cn } from '../../utils'
+import Button from '../Button'
 
 interface FormGoogleButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -29,7 +30,7 @@ const FormGoogleButton: FC<FormGoogleButtonProps> = ({
       {...props}
     >
       <FcGoogle size={22} />
-      <span className='font-medium text-black/80'>Войти с Google</span>
+      <span className="font-medium text-black/80">Войти с Google</span>
     </Button>
   )
 }

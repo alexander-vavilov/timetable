@@ -1,9 +1,10 @@
-import { FC, ButtonHTMLAttributes } from 'react'
-import Button from '../Button'
+import { signInAnonymously, UserCredential } from 'firebase/auth'
+import { ButtonHTMLAttributes, FC } from 'react'
 import { FaUserSecret } from 'react-icons/fa'
-import { UserCredential, signInAnonymously } from 'firebase/auth'
+
 import { auth } from '../../../firebase'
 import { cn } from '../../utils'
+import Button from '../Button'
 
 interface FormAnonymousButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {

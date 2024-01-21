@@ -1,11 +1,12 @@
 import { Dispatch, FC, SetStateAction } from 'react'
-import Modal from '../Modal/Modal'
+
+import { toastError } from '../../toast'
 import { ModalProps } from '../../types'
 import Button from '../Button'
-import UploadedFiles from '../UploadedFiles/UploadedFiles'
-import { toastError } from '../../toast'
-import ModalFooter from '../Modal/ModalFooter'
+import Modal from '../Modal/Modal'
 import ModalContent from '../Modal/ModalContent'
+import ModalFooter from '../Modal/ModalFooter'
+import UploadedFiles from '../UploadedFiles/UploadedFiles'
 
 interface AttachModalProps extends Pick<ModalProps, 'isOpen' | 'handleClose'> {
   currentFiles: File[]
@@ -45,25 +46,25 @@ const AttachModal: FC<AttachModalProps> = ({
     <Modal
       isOpen={isOpen}
       handleClose={handleClose}
-      name='Прикрепить'
-      variant='mobileCompact'
-      className='max-h-[90%] max-w-[300px] sm:max-w-sm'
+      name="Прикрепить"
+      variant="mobileCompact"
+      className="max-h-[90%] max-w-[300px] sm:max-w-sm"
     >
       <ModalContent>
         <UploadedFiles files={currentFiles} setFiles={setCurrentFiles} />
       </ModalContent>
-      <ModalFooter className='justify-between gap-2'>
+      <ModalFooter className="justify-between gap-2">
         <label
-          htmlFor='file'
-          className='button cancel-button w-full flex-auto text-center sm:w-auto sm:flex-none'
+          htmlFor="file"
+          className="button cancel-button w-full flex-auto text-center sm:w-auto sm:flex-none"
         >
           Добавить
         </label>
-        <div className='flex w-full items-center justify-end gap-2 sm:w-auto'>
-          <Button onClick={handleClose} className='cancel-button flex-auto'>
+        <div className="flex w-full items-center justify-end gap-2 sm:w-auto">
+          <Button onClick={handleClose} className="cancel-button flex-auto">
             Отмена
           </Button>
-          <Button onClick={attachFiles} className='flex-auto'>
+          <Button onClick={attachFiles} className="flex-auto">
             Прикрепить
           </Button>
         </div>
