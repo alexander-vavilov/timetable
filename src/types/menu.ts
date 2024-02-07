@@ -1,11 +1,11 @@
 import { IconType } from 'react-icons'
 
-export interface IMenu {
-  items: IMenuItem[]
+export interface MenuProps {
+  items: MenuItem[]
   handleClose: () => void
 }
 
-export interface IMenuItem {
+export interface MenuItem {
   label: string
   icon?: IconType
   action?: () => void
@@ -14,6 +14,6 @@ export interface IMenuItem {
     message: string
     commitLabel: string
   }
-  subMenu?: IMenuItem[]
+  subMenu?: MenuItem[]
   divider?: boolean
 }

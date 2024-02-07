@@ -7,7 +7,7 @@ import {
 } from 'react-icons/md'
 
 import useContextMenu from '../../hooks/useContextMenu'
-import { IMenuItem } from '../../types/menu'
+import { MenuItem } from '../../types/menu'
 import { cn } from '../../utils'
 import ContextMenu from '../ContextMenu'
 import Image from '../Image'
@@ -28,7 +28,7 @@ const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
     isOpen: isContextMenuOpen
   } = useContextMenu()
 
-  const menuItems: IMenuItem[] = [
+  const menuItems: MenuItem[] = [
     {
       label: 'Открыть',
       icon: MdOpenInBrowser,

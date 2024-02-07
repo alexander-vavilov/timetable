@@ -1,12 +1,12 @@
 import { FC, useRef, useState } from 'react'
 import { IoIosArrowForward } from 'react-icons/io'
 
-import { IMenuItem } from '../../types/menu'
+import { MenuItem } from '../../types/menu'
 import { cn } from '../../utils'
 import WarningModal from '../Modals/WarningModal'
 import Menu from './Menu'
 
-interface MenuItemProps extends IMenuItem {
+interface MenuItemProps extends MenuItem {
   handleClose: () => void
 }
 

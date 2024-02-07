@@ -2,11 +2,11 @@ import { forwardRef } from 'react'
 
 import { useClickAway } from '../hooks/useClickAway'
 import useForwardRef from '../hooks/useForwardRef'
-import { IMenu } from '../types/menu'
+import { MenuProps } from '../types/menu'
 import Menu from './Menu/Menu'
 import ModalPortal from './Modal/ModalPortal'
 
-interface ContextMenuProps extends IMenu {
+interface ContextMenuProps extends MenuProps {
   isOpen: boolean
 }
 
