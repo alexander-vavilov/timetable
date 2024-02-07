@@ -11,6 +11,7 @@ import CloseButton from '../CloseButton'
 import ModalPortal from '../Modal/ModalPortal'
 import Spinner from '../Spinner'
 import TextInfo from '../TextInfo'
+import ImageViewerPreviewList from './ImageViewerPreviewList'
 
 interface ImagesViewerProps {
   imageURLs: string[]
@@ -104,23 +105,10 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
           transform: `scale(${crop.scale}) rotate(${crop.rotate}deg)`
         }}
       />
-      <div className="mx-auto flex w-full max-w-64 justify-center gap-1 overflow-x-scroll py-4">
-        {imageURLs.map((imageURL) => (
-          <div
-            onClick={() =>
-              setViewedImageIndex(
-                imageURLs.findIndex((image) => image === imageURL)
-              )
-            }
-            className="cursor-pointer"
-          >
-            <img
-              src={imageURL}
-              className="h-14 w-full max-w-7 object-cover object-center"
-            />
-          </div>
-        ))}
-      </div>
+      <ImageViewerPreviewList
+        imageURLs={imageURLs}
+        setViewedImageIndex={setViewedImageIndex}
+      />
       <CloseButton
         onClick={handleClose}
         className="absolute right-0 top-0 z-10 p-4"
