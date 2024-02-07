@@ -17,7 +17,7 @@ const LessonViewUnprocessedFiles: FC<LessonViewUnprocessedFilesProps> = ({
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2 border-b border-neutral-700 pb-4">
+    <div className="flex flex-wrap items-center gap-2">
       {[...files].map((file, index) => {
         return (
           <LessonViewUnprocessedFile

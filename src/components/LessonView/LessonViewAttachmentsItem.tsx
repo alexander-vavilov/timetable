@@ -57,7 +57,7 @@ const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
       <button
         onClick={openContextMenu}
         className={cn(
-          'absolute right-0.5 top-0.5 rounded-full bg-neutral-600 p-1 hover:bg-neutral-500',
+          'image-button absolute right-0.5 top-0.5 p-1',
           !isContextMenuOpen &&
             'cursor:invisible cursor:opacity-0 cursor:group-hover:visible cursor:group-hover:opacity-100'
         )}

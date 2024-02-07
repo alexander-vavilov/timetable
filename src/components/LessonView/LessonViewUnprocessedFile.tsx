@@ -19,7 +19,7 @@ const LessonViewUnprocessedFile: FC<LessonViewUnprocessedFileProps> = ({
       <Image src={fileURL} className="h-20 w-20 cursor-default" />
       <button
         onClick={handleDelete}
-        className="absolute right-0.5 top-0.5 rounded-full bg-neutral-600 p-0.5 hover:bg-neutral-500"
+        className="image-button absolute right-0.5 top-0.5 p-0.5"
       >
         <MdClose size={18} />
       </button>

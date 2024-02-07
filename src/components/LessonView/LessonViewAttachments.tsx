@@ -8,7 +8,7 @@ const LessonViewAttachments: FC<{ filesURL: string[] }> = ({ filesURL }) => {
   const [viewedImageIndex, setViewedImageIndex] = useState<number | null>(null)
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col border-t border-gray-200 pt-4 dark:border-neutral-500">
       <div className="flex flex-wrap gap-2">
         {filesURL.map((fileURL, index) => (
           <LessonViewAttachmentsItem

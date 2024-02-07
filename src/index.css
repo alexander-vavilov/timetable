@@ -51,4 +51,7 @@ input[type='time']::-webkit-calendar-picker-indicator {
   .overlay {
     @apply fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-black/30;
   }
+  .image-button {
+    @apply rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-neutral-600 dark:hover:bg-neutral-500;
+  }
 }

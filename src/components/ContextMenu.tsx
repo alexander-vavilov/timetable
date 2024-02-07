@@ -12,7 +12,10 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
   ({ isOpen, items, handleClose }, ref) => {
     return (
       isOpen && (
-        <ModalPortal onRequestClose={handleClose}>
+        <ModalPortal
+          onRequestClose={handleClose}
+          className={{ overlay: 'bg-transparent' }}
+        >
           <div ref={ref} className="absolute">
             <Menu items={items} handleClose={handleClose} />
           </div>
