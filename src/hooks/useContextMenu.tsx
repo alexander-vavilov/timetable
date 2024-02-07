@@ -8,13 +8,12 @@ const useContextMenu = () => {
     y: null
   })
   const [isOpen, setIsOpen] = useState(false)
-  const ref = useRef<HTMLDivElement | null>(null)
+  const ref = useRef<HTMLDivElement>(null)
 
   const open = (e: MouseEvent) => {
     e.preventDefault()
-    const { pageX, pageY } = e
 
-    setClickPosition({ x: pageX, y: pageY })
+    setClickPosition({ x: e.pageX, y: e.pageY })
     setIsOpen(true)
   }
 
@@ -43,6 +42,8 @@ const useContextMenu = () => {
 
     const position = calculatePosition()
     if (position) {
+      // ref.current.style.transform = `translate(${position.x}px, ${position.y}px)`
+
       ref.current.style.left = `${position.x}px`
       ref.current.style.top = `${position.y}px`
     }

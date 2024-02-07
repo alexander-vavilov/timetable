@@ -1,11 +1,21 @@
 import { FC } from 'react'
 import { MdClose } from 'react-icons/md'
 
-const CloseButton: FC<{ onClick?: () => void }> = ({ onClick }) => {
+import { cn } from '../utils'
+
+interface CloseButtonProps {
+  onClick: () => void
+  className?: string
+}
+
+const CloseButton: FC<CloseButtonProps> = ({ onClick, className }) => {
   return (
     <button
       onClick={onClick}
-      className="-m-2 flex items-center gap-1 p-2 text-gray-800/70 transition-colors duration-300 hover:text-gray-800 dark:text-white/70 hover:dark:text-white"
+      className={cn(
+        'flex items-center gap-1 p-2 text-gray-800/70 transition-colors duration-300 hover:text-gray-800 dark:text-white/70 hover:dark:text-white',
+        className
+      )}
     >
       <MdClose size={24} />
       <span className="touch:hidden">ESC</span>

@@ -16,7 +16,7 @@ const Lessons: FC<LessonsProps> = ({ items, date }) => {
 
   return (
     <ul className="divide-y divide-gray-200 bg-white shadow-md transition-background dark:divide-neutral-800 dark:bg-neutral-900 dark:shadow-none">
-      {items?.map((item) => (
+      {items.map((item) => (
         <LessonsItem key={item.id} date={date} {...item} />
       ))}
       {isEditMode && <LessonsAddButton date={date} />}

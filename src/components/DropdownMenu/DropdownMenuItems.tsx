@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { IconType } from 'react-icons'
 
 import { cn } from '../../utils'
-import MenuItem from './MenuItem'
+import MenuItem from './DropdownMenuItem'
 
 type menuItem = {
   label: string
@@ -12,13 +12,13 @@ type menuItem = {
   permissions?: boolean
 }
 
-interface MenuItemsProps {
+interface DropdownMenuItemsProps {
   handleClose: () => void
   items: menuItem[]
   styleVariant?: 'standard' | 'shrink'
 }
 
-const MenuItems: FC<MenuItemsProps> = ({
+const DropdownMenuItems: FC<DropdownMenuItemsProps> = ({
   handleClose,
   items,
   styleVariant = 'standard'
@@ -45,4 +45,4 @@ const MenuItems: FC<MenuItemsProps> = ({
   )
 }
 
-export default MenuItems
+export default DropdownMenuItems

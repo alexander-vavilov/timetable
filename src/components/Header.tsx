@@ -3,8 +3,8 @@ import { Link, useParams } from 'react-router-dom'
 
 import { UserContext } from '../contexts/UserContext'
 import { IUserContext } from '../types/contexts'
+import DropdownMenu from './DropdownMenu/DropdownMenu'
 import Logo from './Logo'
-import Menu from './Menu/Menu'
 
 const Header: FC = () => {
   const { scheduleId } = useParams()
@@ -25,7 +25,7 @@ const Header: FC = () => {
               Создать свое расписание
             </Link>
           )}
-          <Menu />
+          <DropdownMenu />
         </div>
       </div>
     </header>

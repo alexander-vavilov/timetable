@@ -21,17 +21,16 @@ const WarningModal: FC<WarningModalProps> = ({
 }) => {
   const confirm = () => {
     confirmHandler()
-    props.handleClose()
+    props.onRequestClose()
   }
 
   return (
     <Modal
       className={cn('max-w-[300px] sm:max-w-sm', props.className)}
-      variant="mobileCompact"
       {...props}
     >
       <div className="p-4">
-        <div className="flex items-end">
+        <div className="flex min-h-20 items-end">
           <span className="self-start pb-8">
             {message
               ? message
@@ -47,7 +46,7 @@ const WarningModal: FC<WarningModalProps> = ({
             {confirmButtonLabel}
           </Button>
           <Button
-            onClick={props.handleClose}
+            onClick={props.onRequestClose}
             className="cancel-button flex-auto"
           >
             Отменить

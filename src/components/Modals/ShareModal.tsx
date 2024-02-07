@@ -7,7 +7,6 @@ import { toast } from 'sonner'
 import { ThemeContext } from '../../contexts/ThemeContext'
 import { IThemeContext } from '../../types/contexts'
 import Modal from '../Modal/Modal'
-import ModalContent from '../Modal/ModalContent'
 
 const ShareModal: FC = () => {
   const { scheduleId } = useParams()
@@ -26,11 +25,10 @@ const ShareModal: FC = () => {
   return (
     <Modal
       name="Поделиться расписанием"
-      handleClose={handleClose}
+      onRequestClose={handleClose}
       className="w-auto max-w-[300px] sm:max-w-xl"
-      variant="mobileCompact"
     >
-      <ModalContent className="flex flex-col items-center justify-center">
+      <Modal.Content className="flex flex-col items-center justify-center">
         <QRCodeSVG
           value={scheduleURL}
           size={160}
@@ -49,7 +47,7 @@ const ShareModal: FC = () => {
             <MdOutlineCopyAll size={20} />
           </div>
         </div>
-      </ModalContent>
+      </Modal.Content>
     </Modal>
   )
 }

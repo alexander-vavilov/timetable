@@ -10,7 +10,8 @@
 }
 
 input,
-button {
+button,
+image {
   @apply outline-none focus:outline-none;
 }
 input[type='time'] {
@@ -42,9 +43,12 @@ input[type='time']::-webkit-calendar-picker-indicator {
     @apply bg-gray-400 hover:bg-gray-400/80 dark:bg-neutral-600 hover:dark:bg-neutral-700;
   }
   .image-viewer-button {
-    @apply rounded-full p-2 text-neutral-400 transition-colors duration-300 hover:bg-neutral-600/30 hover:text-white;
+    @apply rounded-full p-2 text-white/60 transition-colors duration-300 hover:bg-neutral-600/30 hover:text-white;
   }
   .input {
     @apply border-gray-200 px-2 py-1 transition-colors duration-300 dark:border-neutral-500;
+  }
+  .overlay {
+    @apply fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-black/30;
   }
 }

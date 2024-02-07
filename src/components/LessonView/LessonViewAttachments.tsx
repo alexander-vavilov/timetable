@@ -1,6 +1,6 @@
 import { FC, useState } from 'react'
 
-import ImagesViewer from '../ImagesViewer/ImageViewer'
+import ImageViewer from '../ImageViewer/ImageViewer'
 import TextInfo from '../TextInfo'
 import LessonViewAttachmentsItem from './LessonViewAttachmentsItem'
 
@@ -14,12 +14,12 @@ const LessonViewAttachments: FC<{ filesURL: string[] }> = ({ filesURL }) => {
           <LessonViewAttachmentsItem
             key={fileURL}
             fileURL={fileURL}
-            onClick={() => setViewedImageIndex(index)}
+            handleOpen={() => setViewedImageIndex(index)}
           />
         ))}
         {viewedImageIndex !== null && (
-          <ImagesViewer
-            filesURL={filesURL}
+          <ImageViewer
+            imageURLs={filesURL}
             viewedImageIndex={viewedImageIndex}
             setViewedImageIndex={setViewedImageIndex}
           />

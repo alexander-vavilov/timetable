@@ -2,12 +2,15 @@ import { FC } from 'react'
 
 import { cn } from '../../utils'
 
-interface MenuButtonProps {
+interface DropdownMenuButtonProps {
   onClick: () => void
   isOpen: boolean
 }
 
-const MenuButton: FC<MenuButtonProps> = ({ onClick, isOpen }) => {
+const DropdownMenuButton: FC<DropdownMenuButtonProps> = ({
+  onClick,
+  isOpen
+}) => {
   return (
     <button className="p-1.5" onClick={onClick}>
       <div className="relative h-4 w-6">
@@ -34,4 +37,4 @@ const MenuButton: FC<MenuButtonProps> = ({ onClick, isOpen }) => {
   )
 }
 
-export default MenuButton
+export default DropdownMenuButton

@@ -12,9 +12,10 @@ const ScheduleCreateButton: FC = () => {
     ScheduleContext
   ) as IScheduleContext
 
-  return isOwner ? (
-    <Button onClick={() => setIsEditMode(true)}>Создать</Button>
-  ) : (
+  if (isOwner)
+    return <Button onClick={() => setIsEditMode(true)}>Создать</Button>
+
+  return (
     <Link to={`/schedule/${currentUser?.uid}`} className="button">
       Создать свое расписание
     </Link>

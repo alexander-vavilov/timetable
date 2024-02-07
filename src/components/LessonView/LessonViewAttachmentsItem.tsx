@@ -1,64 +1,76 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
+import { BsThreeDotsVertical } from 'react-icons/bs'
+import {
+  MdDeleteOutline,
+  MdOpenInBrowser,
+  MdOutlineFileDownload
+} from 'react-icons/md'
 
+import useContextMenu from '../../hooks/useContextMenu'
+import { IMenuItem } from '../../types/menu'
 import { cn } from '../../utils'
-import Spinner from '../Spinner'
+import ContextMenu from '../ContextMenu'
+import Image from '../Image'
 
 interface LessonViewAttachmentsItemProps {
   fileURL: string
-  onClick?: () => void
-  className?: string
+  handleOpen: () => void
 }
 
 const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
   fileURL,
-  onClick,
-  className
+  handleOpen
 }) => {
-  // const contextMenuItems = [
-  //   {
-  //     label: 'Скопировать ссылку',
-  //     icon: MdClose,
-  //     handler: () => console.log('click')
-  //   },
-  //   {
-  //     label: 'Скопировать изображение',
-  //     icon: MdClose,
-  //     handler: () => console.log('click')
-  //   },
-  //   {
-  //     label: 'Сохранить',
-  //     icon: MdClose,
-  //     handler: () => console.log('click')
-  //   },
-  //   {
-  //     label: 'Удалить',
-  //     icon: MdClose,
-  //     handler: () => console.log('click')
-  //   }
-  // ]
-  const [isLoading, setIsLoading] = useState(true)
+  const {
+    ref,
+    open: openContextMenu,
+    close: closeContextMenu,
+    isOpen: isContextMenuOpen
+  } = useContextMenu()
+
+  const menuItems: IMenuItem[] = [
+    {
+      label: 'Открыть',
+      icon: MdOpenInBrowser,
+      action: () => handleOpen()
+    },
+    {
+      label: 'Сохранить',
+      icon: MdOutlineFileDownload,
+      action: () => window.open(fileURL)
+    },
+    {
+      label: 'Удалить',
+      icon: MdDeleteOutline,
+      action: () => {},
+      warning: {
+        commitLabel: 'удалить',
+        message: 'fjsdklfsd',
+        title: 'AAAAAAA'
+      }
+    }
+  ]
 
   return (
-    <div
-      className={cn(
-        'relative h-32 w-32 cursor-pointer overflow-hidden rounded-md',
-        className
-      )}
-    >
-      <img
-        src={fileURL}
-        onClick={onClick}
-        // onContextMenu={(e) => open(e)}
-        onLoad={() => setIsLoading(false)}
-        className="h-full w-full overflow-hidden object-cover object-center"
-        draggable={false}
-        alt="img"
+    <div onContextMenu={openContextMenu} className="group relative">
+      <Image src={fileURL} onClick={handleOpen} />
+      <button
+        onClick={openContextMenu}
+        className={cn(
+          'absolute right-0.5 top-0.5 rounded-full bg-neutral-600 p-1 hover:bg-neutral-500',
+          !isContextMenuOpen &&
+            'cursor:invisible cursor:opacity-0 cursor:group-hover:visible cursor:group-hover:opacity-100'
+        )}
+      >
+        <BsThreeDotsVertical size={18} />
+      </button>
+
+      <ContextMenu
+        ref={ref}
+        items={menuItems}
+        handleClose={closeContextMenu}
+        isOpen={isContextMenuOpen}
       />
-      {isLoading && (
-        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-neutral-700">
-          <Spinner />
-        </div>
-      )}
     </div>
   )
 }

@@ -10,7 +10,7 @@ const LessonViewModalPlaceholder: FC = () => {
   return (
     <Modal
       name="Загрзука..."
-      handleClose={() => navigate(`/schedule/${scheduleId}`)}
+      onRequestClose={() => navigate(`/schedule/${scheduleId}`)}
     >
       <div className="p-4">
         <div className="flex flex-col gap-1">

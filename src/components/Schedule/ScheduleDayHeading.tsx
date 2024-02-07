@@ -4,11 +4,7 @@ import { FC } from 'react'
 
 import { cn } from '../../utils'
 
-interface ScheduleDayHeadingProps {
-  date: Date
-}
-
-const ScheduleDayHeading: FC<ScheduleDayHeadingProps> = ({ date }) => {
+const ScheduleDayHeading: FC<{ date: Date }> = ({ date }) => {
   const isCurrentDay = isSameDay(new Date(), date)
   const dateString = format(date, 'eeee, dd MMM', {
     locale: ru

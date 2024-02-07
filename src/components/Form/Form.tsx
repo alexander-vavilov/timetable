@@ -28,20 +28,22 @@ const Form: FC<FormProps> = ({ title, type, handleSubmit }) => {
 
   const { currentUser } = useContext(UserContext) as IUserContext
 
-  const onSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    handleSubmit(email, password, setIsLoading)
-  }
   const handleAuth = async (callback: () => Promise<UserCredential>) => {
     setIsLoading(true)
 
     try {
       await callback()
+      toast.success('Вы успешно авторизованы!')
     } catch (error) {
       toast.error('Что-то пошло не так...')
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleSubmitForm = (e: FormEvent) => {
+    e.preventDefault()
+    handleAuth(() => handleSubmit(email, password))
   }
 
   if (currentUser) return <Navigate to="/" />
@@ -52,7 +54,7 @@ const Form: FC<FormProps> = ({ title, type, handleSubmit }) => {
         <div className="-mt-4 py-8 text-center">
           <Logo size={36} />
         </div>
-        <form onSubmit={onSubmit} className="flex flex-col gap-4">
+        <form onSubmit={handleSubmitForm} className="flex flex-col gap-4">
           <Input
             value={email}
             onChange={(e) => setEmail(e.target.value)}

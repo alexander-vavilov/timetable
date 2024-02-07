@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react'
+import { RefObject, useEffect } from 'react'
 
-export const useClickAway = (callback: () => void) => {
-  const ref = useRef<HTMLDivElement>(null)
-
+export const useClickAway = (
+  callback: () => void,
+  ref: RefObject<HTMLDivElement>
+) => {
   useEffect(() => {
     if (!ref) return
 
@@ -13,6 +14,4 @@ export const useClickAway = (callback: () => void) => {
     document.addEventListener('mousedown', handleClickAway)
     return () => document.removeEventListener('mousedown', handleClickAway)
   }, [])
-
-  return ref
 }

@@ -1,37 +1,70 @@
-import { FC } from 'react'
-import ReactModal from 'react-modal'
+import { ReactNode } from 'react'
 
 import { ModalProps } from '../../types'
 import { cn } from '../../utils'
-import ModalHeader from './ModalHeader'
+import CloseButton from '../CloseButton'
+import ModalPortal from './ModalPortal'
 
-const defaultStyles =
-  'flex w-full flex-col overflow-hidden bg-white text-black outline-none dark:bg-neutral-800 dark:text-white'
-
-const styles = {
-  mobileFullSize:
-    'h-d-screen lg:h-auto lg:max-h-[50%] lg:max-w-[812px] lg:rounded-md lg:shadow-md lg:dark:shadow-none',
-  mobileCompact:
-    'h-auto max-h-[60%] max-w-[812px] rounded-md shadow-md dark:shadow-none'
+const Modal = ({ name, children, onRequestClose, className }: ModalProps) => {
+  return (
+    <ModalPortal
+      onRequestClose={onRequestClose}
+      className={{
+        overlay: 'flex items-center justify-center',
+        modal: cn(
+          'flex h-auto max-h-[60%] w-full max-w-3xl flex-col overflow-hidden rounded-md border-gray-200 bg-white text-black shadow-md outline-none dark:border-neutral-700 dark:bg-neutral-800 dark:text-white dark:shadow-none lg:border',
+          className
+        )
+      }}
+    >
+      <Modal.Header label={name} onRequestClose={onRequestClose} />
+      {children}
+    </ModalPortal>
+  )
 }
 
-const Modal: FC<ModalProps> = ({
-  isOpen = true,
-  variant = 'mobileFullSize',
-  className,
-  ...props
-}) => {
+interface ModalHeaderProps {
+  label: string
+  onRequestClose: () => void
+}
+
+Modal.Header = ({ label, onRequestClose }: ModalHeaderProps) => {
   return (
-    <ReactModal
-      isOpen={isOpen}
-      onRequestClose={props.handleClose}
-      className={cn(defaultStyles, styles[variant], className)}
-      overlayClassName="fixed top-0 left-0 bg-black/30 w-full h-full flex items-center justify-center z-20"
-      ariaHideApp={false}
+    <header className="flex justify-between border-b border-gray-300 p-4 dark:border-neutral-700 dark:bg-neutral-800">
+      <span className="text-lg font-medium">{label}</span>
+      <CloseButton onClick={onRequestClose} className="-m-2" />
+    </header>
+  )
+}
+
+interface ModalPartsProps {
+  children: ReactNode
+  className?: string
+}
+
+Modal.Content = ({ children, className }: ModalPartsProps) => {
+  return (
+    <div
+      className={cn(
+        'h-full flex-auto overflow-y-auto overflow-x-hidden p-4',
+        className
+      )}
     >
-      <ModalHeader label={props.name} handleClose={props.handleClose} />
-      {props.children}
-    </ReactModal>
+      {children}
+    </div>
+  )
+}
+
+Modal.Footer = ({ children, className }: ModalPartsProps) => {
+  return (
+    <div
+      className={cn(
+        'flex items-center gap-4 border-t border-gray-300 p-4 shadow-md dark:border-neutral-700 dark:shadow-none',
+        className
+      )}
+    >
+      {children}
+    </div>
   )
 }
 

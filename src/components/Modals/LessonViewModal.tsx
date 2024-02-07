@@ -12,14 +12,12 @@ import LessonViewAttachments from '../LessonView/LessonViewAttachments'
 import LessonViewTimeInputs from '../LessonView/LessonViewTimeInputs'
 import LessonViewUnprocessedFiles from '../LessonView/LessonViewUnprocessedFiles'
 import Modal from '../Modal/Modal'
-import ModalContent from '../Modal/ModalContent'
-import ModalFooter from '../Modal/ModalFooter'
 import WarningModal from './WarningModal'
 
 const LessonViewModal: FC = () => {
   const { lessonId, scheduleId } = useParams()
   const {
-    state: { isNewLesson, isUnprocessed, isSavingInProgress },
+    state: { isUnprocessed, isSavingInProgress },
     functions: { handleSave },
     formState
   } = useLesson(lessonId as string)
@@ -32,20 +30,22 @@ const LessonViewModal: FC = () => {
   const closeModal = () => navigate(`/schedule/${scheduleId}`)
 
   const handleCloseModal = () => {
-    if (isUnprocessed && !isNewLesson) {
-      setIsWarningOpen(true)
-    } else if (isSavingInProgress) {
-      toast.info(
-        'Дождитесь окончания сохранения. Это может занять некоторое время.'
-      )
-    } else {
-      closeModal()
-    }
+    const toastMessage =
+      'Дождитесь окончания сохранения. Это может занять некоторое время.'
+
+    if (isSavingInProgress) return toast.info(toastMessage)
+    if (isUnprocessed) return setIsWarningOpen(true)
+
+    closeModal()
   }
 
   return (
-    <Modal handleClose={handleCloseModal} name="Детали">
-      <ModalContent className="pt-6">
+    <Modal
+      onRequestClose={handleCloseModal}
+      name="Детали"
+      className="h-full max-h-full md:h-auto md:max-h-[48%]"
+    >
+      <Modal.Content className="pt-6">
         <Input
           type="text"
           editable={isOwner}
@@ -54,7 +54,7 @@ const LessonViewModal: FC = () => {
           onChange={(e) => formState.setName(e.target.value)}
           className="text-3xl"
           placeholder="предмет"
-          autoFocus={!formState.name} // the name is empty => this is probably a new lesson
+          autoFocus={!formState.name.length}
         />
         <div className="flex flex-col gap-4 pt-10">
           <Input
@@ -96,22 +96,23 @@ const LessonViewModal: FC = () => {
             <LessonViewAttachments filesURL={formState.existingFilesURL} />
           )}
         </div>
-      </ModalContent>
+      </Modal.Content>
       {isUnprocessed && (
-        <ModalFooter className="justify-end">
+        <Modal.Footer className="justify-end">
           <Button onClick={handleSave} isLoading={isSavingInProgress}>
             Сохранить
           </Button>
-        </ModalFooter>
+        </Modal.Footer>
       )}
-      <WarningModal
-        isOpen={isWarningOpen}
-        handleClose={() => setIsWarningOpen(false)}
-        name="Отменить изменения"
-        message="Внесенные изменения не будут сохранены."
-        confirmHandler={closeModal}
-        confirmButtonLabel="Пффф... Выйти"
-      />
+      {isWarningOpen && (
+        <WarningModal
+          onRequestClose={() => setIsWarningOpen(false)}
+          name="Отменить изменения"
+          message="Внесенные изменения не будут сохранены."
+          confirmHandler={closeModal}
+          confirmButtonLabel="Пффф... Выйти"
+        />
+      )}
     </Modal>
   )
 }

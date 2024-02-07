@@ -9,6 +9,7 @@ import useFiles from '../components/LessonView/useFiles'
 import useTimeCalc from '../components/LessonView/useTimeCalc'
 import { ScheduleContext } from '../contexts/ScheduleContext'
 import { toastError } from '../toast'
+import { Lesson } from '../types'
 import { IScheduleContext } from '../types/contexts'
 
 const useLesson = (id: string) => {
@@ -17,22 +18,35 @@ const useLesson = (id: string) => {
   const searchParams = useSearchParams()[0]
   const unixDateTime = Number(searchParams.get('date'))
 
-  const { lessons, isOwner } = useContext(ScheduleContext) as IScheduleContext
-  const lessonData = lessons?.[id] || null
-
   const weekDay = getDay(new Date(unixDateTime))
   const { start, end } = useTimeCalc(weekDay)
 
+  const { lessons, isOwner } = useContext(ScheduleContext) as IScheduleContext
+
+  const defaultLessonData: Required<Omit<Lesson, 'id'>> = {
+    name: '',
+    location: '',
+    teacher: '',
+    start,
+    end,
+    weekDay,
+    homework: {
+      [unixDateTime]: ''
+    }
+  }
+
+  const lessonData = { ...defaultLessonData, ...lessons[id] }
+
   // Form state
-  const [name, setName] = useState(lessonData?.name || '')
-  const [teacher, setTeacher] = useState(lessonData?.teacher || '')
-  const [location, setLocation] = useState(lessonData?.location || '')
+  const [name, setName] = useState(lessonData.name)
+  const [teacher, setTeacher] = useState(lessonData.teacher)
+  const [location, setLocation] = useState(lessonData.location)
   const [time, setTime] = useState({
-    start: lessonData?.start || start,
-    end: lessonData?.end || end
+    start: lessonData.start,
+    end: lessonData.end
   })
   const [homework, setHomework] = useState(
-    lessonData?.homework?.[unixDateTime] || ''
+    lessonData.homework[unixDateTime] || ''
   )
 
   const {
@@ -52,11 +66,10 @@ const useLesson = (id: string) => {
     weekDay,
     homework: {
       ...lessonData?.homework,
-      ...(!!homework.length && { [unixDateTime]: homework }) // homework length > 0 => this field added to homework object
+      ...(!!homework?.length && { [unixDateTime]: homework }) // homework length > 0 => this field added to homework object
     }
   }
 
-  const isNewLesson = lessonData === null
   const isContentChanged = !isEqual(currentLesson, lessonData)
   const isUnprocessed = isContentChanged || !!unprocessedFiles.length
 
@@ -73,9 +86,9 @@ const useLesson = (id: string) => {
         const docSnap = await getDoc(docRef)
 
         if (docSnap.exists()) {
-          await updateDoc(docRef, { [id]: lessonData })
+          await updateDoc(docRef, { [id]: currentLesson })
         } else {
-          await setDoc(docRef, { [id]: lessonData })
+          await setDoc(docRef, { [id]: currentLesson })
         }
       }
 
@@ -88,7 +101,7 @@ const useLesson = (id: string) => {
   }
 
   return {
-    state: { isNewLesson, isUnprocessed, isSavingInProgress },
+    state: { isUnprocessed, isSavingInProgress },
     formState: {
       name,
       setName,

@@ -1,4 +1,5 @@
-import { Dispatch, ReactNode, SetStateAction } from 'react'
+import { UserCredential } from 'firebase/auth'
+import { ReactNode } from 'react'
 
 export interface Lesson {
   name: string
@@ -19,15 +20,12 @@ export interface Lessons {
 
 export type handleSubmitFn = (
   email: string,
-  password: string,
-  setIsLoading: Dispatch<SetStateAction<boolean>>
-) => void
+  password: string
+) => Promise<UserCredential>
 
 export interface ModalProps {
   children?: ReactNode
-  variant?: 'mobileFullSize' | 'mobileCompact'
-  handleClose: () => void
+  onRequestClose: () => void
   name: string
-  isOpen?: boolean
   className?: string
 }

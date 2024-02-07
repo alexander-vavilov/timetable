@@ -21,8 +21,8 @@ const defaultStyles =
   'peer w-full bg-transparent input focus:border-gray-500 disabled:text-white focus:dark:border-neutral-200'
 
 const styles = {
-  outline: cn(defaultStyles, 'rounded-md border-2'),
-  flushed: cn(defaultStyles, 'rounded-none border-b-2'),
+  outline: cn(defaultStyles, 'rounded-md border'),
+  flushed: cn(defaultStyles, 'rounded-none border-b'),
   time: 'max-w-max rounded-md bg-gray-200 p-1 text-sm dark:bg-neutral-700'
 }
 

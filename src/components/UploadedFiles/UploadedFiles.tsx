@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react'
 
-import ImagesViewer from '../ImagesViewer/ImageViewer'
+import ImagesViewer from '../ImageViewer/ImageViewer'
 import UploadedFile from './UploadedFile'
 
 interface UploadedFilesProps {
