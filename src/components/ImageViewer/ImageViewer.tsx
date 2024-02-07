@@ -113,23 +113,21 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
         onClick={handleClose}
         className="absolute right-0 top-0 z-10 p-4"
       />
-      <div className="absolute bottom-0 right-0 flex w-full items-end justify-between p-4">
-        <TextInfo className="pointer-events-none select-none font-medium">
-          Изображение {viewedImageIndex + 1} из {imageURLs.length}
-        </TextInfo>
-        <div className="z-10 flex gap-1">
-          <button onClick={rotate} className="image-viewer-button">
-            <AiOutlineRotateRight size={24} />
-          </button>
-          <a
-            href={imageURLs[viewedImageIndex]}
-            target="_blank"
-            download
-            className="image-viewer-button"
-          >
-            <AiOutlineDownload size={24} />
-          </a>
-        </div>
+      <TextInfo className="pointer-events-none absolute bottom-4 left-4 select-none font-medium">
+        Изображение {viewedImageIndex + 1} из {imageURLs.length}
+      </TextInfo>
+      <div className="absolute bottom-4 right-4 z-10 flex gap-1">
+        <button onClick={rotate} className="image-viewer-button">
+          <AiOutlineRotateRight size={24} />
+        </button>
+        <a
+          href={imageURLs[viewedImageIndex]}
+          target="_blank"
+          download
+          className="image-viewer-button"
+        >
+          <AiOutlineDownload size={24} />
+        </a>
       </div>
       {!isFirstItem && (
         <button

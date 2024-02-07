@@ -100,7 +100,7 @@ const MenuItem: FC<MenuItemProps> = ({
           <button
             onClick={handleClick}
             className={cn(
-              'my-0.5 flex w-full select-none items-center justify-between rounded-[4px] px-2 py-1 text-sm hover:text-white dark:active:text-white dark:peer-hover:text-white',
+              'my-0.5 flex w-full select-none items-center justify-between rounded-[4px] px-2 py-1 text-sm dark:hover:text-white dark:active:text-white dark:peer-hover:text-white',
               {
                 'text-red-500 hover:bg-red-500 active:bg-red-500/70 peer-hover:bg-red-500':
                   !!warning,

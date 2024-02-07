@@ -52,26 +52,27 @@ const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
   ]
 
   return (
-    <div onContextMenu={openContextMenu} className="group relative">
-      <Image src={fileURL} onClick={handleOpen} />
-      <button
-        onClick={openContextMenu}
-        className={cn(
-          'image-button absolute right-0.5 top-0.5 p-1',
-          !isContextMenuOpen &&
-            'cursor:invisible cursor:opacity-0 cursor:group-hover:visible cursor:group-hover:opacity-100'
-        )}
-      >
-        <BsThreeDotsVertical size={18} />
-      </button>
-
+    <>
+      <div onContextMenu={openContextMenu} className="group relative">
+        <Image src={fileURL} onClick={handleOpen} />
+        <button
+          onClick={openContextMenu}
+          className={cn(
+            'image-button absolute right-0.5 top-0.5 p-1',
+            !isContextMenuOpen &&
+              'cursor:invisible cursor:opacity-0 cursor:group-hover:visible cursor:group-hover:opacity-100'
+          )}
+        >
+          <BsThreeDotsVertical size={18} />
+        </button>
+      </div>
       <ContextMenu
         ref={ref}
         items={menuItems}
         handleClose={closeContextMenu}
         isOpen={isContextMenuOpen}
       />
-    </div>
+    </>
   )
 }
 
