@@ -1,3 +1,4 @@
+import { ref } from 'firebase/storage'
 import { FC } from 'react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import {
@@ -6,27 +7,32 @@ import {
   MdOutlineFileDownload
 } from 'react-icons/md'
 
+import { storage } from '../../../firebase'
 import useContextMenu from '../../hooks/useContextMenu'
+import useFirebaseStorage from '../../hooks/useFirebaseStorage'
+import { firebaseFile } from '../../types'
 import { MenuItem } from '../../types/menu'
 import { cn } from '../../utils'
 import ContextMenu from '../ContextMenu'
 import Image from '../Image'
 
 interface LessonViewAttachmentsItemProps {
-  fileURL: string
+  file: firebaseFile
   handleOpen: () => void
 }
 
 const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
-  fileURL,
+  file,
   handleOpen
 }) => {
   const {
-    ref,
+    ref: contextMenuRef,
     open: openContextMenu,
     close: closeContextMenu,
     isOpen: isContextMenuOpen
   } = useContextMenu()
+
+  const { deleteFile } = useFirebaseStorage()
 
   const menuItems: MenuItem[] = [
     {
@@ -37,16 +43,16 @@ const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
     {
       label: 'Сохранить',
       icon: MdOutlineFileDownload,
-      action: () => window.open(fileURL)
+      action: () => window.open(file.url)
     },
     {
       label: 'Удалить',
       icon: MdDeleteOutline,
-      action: () => {},
+      action: () => deleteFile(ref(storage, file.fullPath)),
       warning: {
-        commitLabel: 'удалить',
-        message: 'fjsdklfsd',
-        title: 'AAAAAAA'
+        name: 'Удалить изображение',
+        message: 'Вы уверены, что хотите удалить данное изображение?',
+        confirmLabel: 'удалить'
       }
     }
   ]
@@ -54,7 +60,7 @@ const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
   return (
     <>
       <div onContextMenu={openContextMenu} className="group relative">
-        <Image src={fileURL} onClick={handleOpen} />
+        <Image src={file.url} onClick={handleOpen} />
         <button
           onClick={openContextMenu}
           className={cn(
@@ -67,9 +73,9 @@ const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
         </button>
       </div>
       <ContextMenu
-        ref={ref}
+        ref={contextMenuRef}
         items={menuItems}
-        handleClose={closeContextMenu}
+        onRequestClose={closeContextMenu}
         isOpen={isContextMenuOpen}
       />
     </>

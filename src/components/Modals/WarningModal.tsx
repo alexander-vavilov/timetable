@@ -8,27 +8,26 @@ import Button from '../Button'
 import Modal from '../Modal/Modal'
 
 interface WarningModalProps extends ModalProps {
-  confirmHandler: () => void
   message?: string
-  confirmButtonLabel: string
+  confirm: {
+    action: () => void
+    label: string
+  }
 }
 
 const WarningModal: FC<WarningModalProps> = ({
-  confirmHandler,
+  confirm,
   message,
-  confirmButtonLabel,
+  className,
   ...props
 }) => {
-  const confirm = () => {
-    confirmHandler()
+  const handleConfirm = () => {
+    confirm.action()
     props.onRequestClose()
   }
 
   return (
-    <Modal
-      className={cn('max-w-[300px] sm:max-w-sm', props.className)}
-      {...props}
-    >
+    <Modal className={cn('max-w-[300px] sm:max-w-sm', className)} {...props}>
       <div className="p-4">
         <div className="flex min-h-20 items-end">
           <span className="self-start pb-8">
@@ -40,10 +39,10 @@ const WarningModal: FC<WarningModalProps> = ({
         </div>
         <div className="flex items-center gap-4">
           <Button
-            onClick={confirm}
+            onClick={handleConfirm}
             className="flex-auto bg-red-600 hover:bg-red-700"
           >
-            {confirmButtonLabel}
+            {confirm.label}
           </Button>
           <Button
             onClick={props.onRequestClose}

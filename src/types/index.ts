@@ -24,8 +24,14 @@ export type handleSubmitFn = (
 ) => Promise<UserCredential>
 
 export interface ModalProps {
+  name: string
   children?: ReactNode
   onRequestClose: () => void
-  name: string
   className?: string
+}
+
+export type firebaseFile = {
+  url: string
+  name: string
+  fullPath: string
 }

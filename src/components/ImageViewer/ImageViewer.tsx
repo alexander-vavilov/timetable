@@ -7,6 +7,7 @@ import {
 } from 'react-icons/md'
 
 import { useKeyDown } from '../../hooks/useKeyDown'
+import { firebaseFile } from '../../types'
 import CloseButton from '../CloseButton'
 import ModalPortal from '../Modal/ModalPortal'
 import Spinner from '../Spinner'
@@ -14,13 +15,13 @@ import TextInfo from '../TextInfo'
 import ImageViewerPreviewList from './ImageViewerPreviewList'
 
 interface ImagesViewerProps {
-  imageURLs: string[]
+  images: firebaseFile[]
   viewedImageIndex: number
   setViewedImageIndex: Dispatch<SetStateAction<number | null>>
 }
 
 const ImagesViewer: FC<ImagesViewerProps> = ({
-  imageURLs,
+  images,
   viewedImageIndex,
   setViewedImageIndex
 }) => {
@@ -54,7 +55,7 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
   )
 
   const isFirstItem = viewedImageIndex === 0
-  const isLastItem = viewedImageIndex + 1 === imageURLs.length
+  const isLastItem = viewedImageIndex + 1 === images.length
 
   const previous = () => {
     if (isFirstItem) return
@@ -95,7 +96,7 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
       )} */}
       <img
         ref={ref}
-        src={imageURLs[viewedImageIndex]}
+        src={images[viewedImageIndex].url}
         onLoad={() => setIsLoading(false)}
         className="relative h-full w-full touch-none"
         draggable={false}
@@ -106,7 +107,7 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
         }}
       />
       <ImageViewerPreviewList
-        imageURLs={imageURLs}
+        images={images}
         setViewedImageIndex={setViewedImageIndex}
       />
       <CloseButton
@@ -114,14 +115,14 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
         className="absolute right-0 top-0 z-10 p-4"
       />
       <TextInfo className="pointer-events-none absolute bottom-4 left-4 select-none font-medium">
-        Изображение {viewedImageIndex + 1} из {imageURLs.length}
+        Изображение {viewedImageIndex + 1} из {images.length}
       </TextInfo>
       <div className="absolute bottom-4 right-4 z-10 flex gap-1">
         <button onClick={rotate} className="image-viewer-button">
           <AiOutlineRotateRight size={24} />
         </button>
         <a
-          href={imageURLs[viewedImageIndex]}
+          href={images[viewedImageIndex].url}
           target="_blank"
           download
           className="image-viewer-button"

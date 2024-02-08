@@ -10,10 +10,7 @@ interface OverlayProps extends HTMLAttributes<HTMLDivElement> {
 const Overlay: FC<OverlayProps> = ({ children, className, ...props }) => {
   return (
     <div
-      className={cn(
-        'fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black/40',
-        className
-      )}
+      className={cn('fixed left-0 top-0 h-full w-full bg-black/50', className)}
       {...props}
     >
       {children}

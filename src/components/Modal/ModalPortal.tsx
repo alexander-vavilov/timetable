@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 
 import { useKeyDown } from '../../hooks/useKeyDown'
 import { cn } from '../../utils'
+import Overlay from '../Overlay'
 
 interface ModalPortalProps {
   children: ReactNode
@@ -32,18 +33,18 @@ const ModalPortal: FC<ModalPortalProps> = ({
 
   if (!rootElement) return null
   return createPortal(
-    <div
-      ref={ref}
-      onClick={onRequestClose}
-      className={cn(
-        'fixed left-0 top-0 z-10 h-full w-full bg-black/50',
-        className?.overlay
-      )}
+    <Overlay
+      onMouseDown={onRequestClose}
+      className={cn('z-10', className?.overlay)}
     >
-      <div onClick={(e) => e.stopPropagation()} className={className?.modal}>
+      <div
+        ref={ref}
+        onMouseDown={(e) => e.stopPropagation()}
+        className={className?.modal}
+      >
         {children}
       </div>
-    </div>,
+    </Overlay>,
     rootElement
   )
 }

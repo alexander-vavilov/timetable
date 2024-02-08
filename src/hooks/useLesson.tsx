@@ -49,12 +49,8 @@ const useLesson = (id: string) => {
     lessonData.homework[unixDateTime] || ''
   )
 
-  const {
-    existingFilesURL,
-    unprocessedFiles,
-    setUnprocessedFiles,
-    processFiles
-  } = useFiles()
+  const { existingFiles, unprocessedFiles, setUnprocessedFiles, processFiles } =
+    useFiles()
 
   // Lesson object to be saved in the db
   const currentLesson = {
@@ -113,7 +109,7 @@ const useLesson = (id: string) => {
       setTime,
       homework,
       setHomework,
-      existingFilesURL,
+      existingFiles,
       unprocessedFiles,
       setUnprocessedFiles
     },

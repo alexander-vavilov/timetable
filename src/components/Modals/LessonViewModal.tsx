@@ -92,8 +92,8 @@ const LessonViewModal: FC = () => {
               setUnprocessedFiles={formState.setUnprocessedFiles}
             />
           )}
-          {!!formState.existingFilesURL.length && (
-            <LessonViewAttachments filesURL={formState.existingFilesURL} />
+          {!!formState.existingFiles.length && (
+            <LessonViewAttachments files={formState.existingFiles} />
           )}
         </div>
       </Modal.Content>
@@ -109,8 +109,7 @@ const LessonViewModal: FC = () => {
           onRequestClose={() => setIsWarningOpen(false)}
           name="Отменить изменения"
           message="Внесенные изменения не будут сохранены."
-          confirmHandler={closeModal}
-          confirmButtonLabel="Пффф... Выйти"
+          confirm={{ action: closeModal, label: 'Пффф... Выйти' }}
         />
       )}
     </Modal>

@@ -2,7 +2,8 @@ import { IconType } from 'react-icons'
 
 export interface MenuProps {
   items: MenuItem[]
-  handleClose: () => void
+  onRequestClose: () => void
+  variant?: 'shrink' | 'default'
 }
 
 export interface MenuItem {
@@ -10,10 +11,10 @@ export interface MenuItem {
   icon?: IconType
   action?: () => void
   warning?: {
-    title: string
+    name: string
     message: string
-    commitLabel: string
+    confirmLabel: string
   }
   subMenu?: MenuItem[]
-  divider?: boolean
+  permission?: boolean
 }

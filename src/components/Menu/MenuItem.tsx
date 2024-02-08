@@ -1,13 +1,15 @@
 import { FC, useRef, useState } from 'react'
 import { IoIosArrowForward } from 'react-icons/io'
 
-import { MenuItem } from '../../types/menu'
+import { menuStyles } from '../../consts'
+import { MenuItem as MenuItemProperties } from '../../types/menu'
 import { cn } from '../../utils'
 import WarningModal from '../Modals/WarningModal'
 import Menu from './Menu'
 
-interface MenuItemProps extends MenuItem {
-  handleClose: () => void
+interface MenuItemProps extends MenuItemProperties {
+  onRequestClose: () => void
+  variant: 'shrink' | 'default'
 }
 
 interface ISubMenuPosition {
@@ -15,15 +17,17 @@ interface ISubMenuPosition {
   y: 'top' | 'bottom'
 }
 
-const MenuItem: FC<MenuItemProps> = ({
-  label,
-  icon: Icon,
-  warning,
-  action,
-  subMenu,
-  handleClose,
-  divider
-}) => {
+const MenuItem: FC<MenuItemProps> = (props) => {
+  const {
+    label,
+    icon: Icon,
+    warning,
+    action,
+    subMenu,
+    onRequestClose,
+    variant = 'default'
+  } = props
+
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false)
   const menuItemRef = useRef<HTMLLIElement>(null)
   const [subMenuPosition, setSubMenuPosition] = useState<ISubMenuPosition>({
@@ -64,7 +68,7 @@ const MenuItem: FC<MenuItemProps> = ({
 
   const handleAction = () => {
     action && action()
-    handleClose()
+    onRequestClose()
   }
 
   const handleClick = () => {
@@ -74,6 +78,8 @@ const MenuItem: FC<MenuItemProps> = ({
     handleAction()
   }
 
+  const styles = menuStyles(!!warning)
+
   return (
     <>
       <li
@@ -81,8 +87,6 @@ const MenuItem: FC<MenuItemProps> = ({
         onMouseEnter={openSubMenu}
         onMouseLeave={closeSubMenu}
       >
-        {divider && <hr className="my-0.5 border-neutral-500/80" />}
-
         <div className="relative">
           {!!subMenu && isSubMenuOpen && (
             <div
@@ -93,25 +97,22 @@ const MenuItem: FC<MenuItemProps> = ({
                 'left-full pl-3': subMenuPosition.x === 'right'
               })}
             >
-              <Menu items={subMenu} handleClose={handleClose} />
+              <Menu items={subMenu} onRequestClose={onRequestClose} />
             </div>
           )}
 
           <button
             onClick={handleClick}
             className={cn(
-              'my-0.5 flex w-full select-none items-center justify-between rounded-[4px] px-2 py-1 text-sm dark:hover:text-white dark:active:text-white dark:peer-hover:text-white',
-              {
-                'text-red-500 hover:bg-red-500 active:bg-red-500/70 peer-hover:bg-red-500':
-                  !!warning,
-                'text-black hover:bg-green-700 active:bg-green-700/70 peer-hover:bg-green-700 dark:text-white/70':
-                  !warning
-              }
+              'flex w-full select-none items-center justify-between',
+              styles.button[variant]
             )}
           >
             <div className="flex cursor-pointer items-center gap-2">
-              {Icon && <Icon size={18} />}
-              <span className="capitalize">{label}</span>
+              <div className={styles.icon[variant]}>
+                {Icon && <Icon size={variant === 'default' ? 20 : 18} />}
+              </div>
+              <span>{label}</span>
             </div>
             {!!subMenu && <IoIosArrowForward size={18} />}
           </button>
@@ -119,10 +120,13 @@ const MenuItem: FC<MenuItemProps> = ({
       </li>
       {isWarningOpen && (
         <WarningModal
-          confirmHandler={handleAction}
           name="Удалить"
-          confirmButtonLabel="Удалить"
           onRequestClose={() => setIsWarningOpen(false)}
+          confirm={{
+            action: handleAction,
+            label: 'Удалить'
+          }}
+          message={warning?.message}
         />
       )}
     </>

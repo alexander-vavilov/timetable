@@ -1,35 +1,29 @@
 import { ref } from 'firebase/storage'
+import { nanoid } from 'nanoid'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { storage } from '../../../firebase'
-import useExtractFilesURL from '../../hooks/useExtractFilesURL'
-import useUploadFile from '../../hooks/useUploadFile'
+import useFirebaseStorage from '../../hooks/useFirebaseStorage'
+import { firebaseFile } from '../../types'
 
 const useFiles = () => {
-  const [existingFilesURL, setExistingFilesURL] = useState<string[]>([])
+  const [existingFiles, setExistingFiles] = useState<firebaseFile[]>([])
   const [unprocessedFiles, setUnprocessedFiles] = useState<File[]>([])
 
   const { scheduleId, lessonId } = useParams()
 
-  const extractFilesURL = useExtractFilesURL()
+  const { getFilesURLs } = useFirebaseStorage()
 
-  const fetch = () => {
-    const listRef = ref(storage, `schedules/${scheduleId}/${lessonId}`)
-    extractFilesURL(listRef).then(setExistingFilesURL)
-  }
+  const storageRef = ref(storage, `schedules/${scheduleId}/${lessonId}`)
+  const fetch = async () => getFilesURLs(storageRef).then(setExistingFiles)
 
-  const { handleUpload } = useUploadFile()
+  const { uploadFile } = useFirebaseStorage()
 
   const processFiles = async (files: File[] | FileList = unprocessedFiles) => {
-    const uploadedFilesURL: string[] = []
-
     for (const file of [...files]) {
-      const downloadURL = await handleUpload(file)
-
-      if (typeof downloadURL === 'string') {
-        uploadedFilesURL.push(downloadURL)
-      }
+      const fileRef = ref(storageRef, nanoid())
+      await uploadFile(file, fileRef)
     }
 
     fetch()
@@ -41,7 +35,7 @@ const useFiles = () => {
   }, [])
 
   return {
-    existingFilesURL,
+    existingFiles,
     unprocessedFiles,
     setUnprocessedFiles,
     processFiles

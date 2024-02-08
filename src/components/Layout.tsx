@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { Outlet } from 'react-router-dom'
 
 import { ScheduleContextProvider } from '../contexts/ScheduleContext'
-import Header from './Header'
+import Header from './Header/Header'
 import PrivateRoute from './PrivateRoute'
 
 const Layout: FC = () => {

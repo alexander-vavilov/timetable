@@ -1,7 +1,5 @@
 import { forwardRef } from 'react'
 
-import { useClickAway } from '../hooks/useClickAway'
-import useForwardRef from '../hooks/useForwardRef'
 import { MenuProps } from '../types/menu'
 import Menu from './Menu/Menu'
 import ModalPortal from './Modal/ModalPortal'
@@ -11,19 +9,19 @@ interface ContextMenuProps extends MenuProps {
 }
 
 const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
-  ({ isOpen, items, handleClose }, ref) => {
-    const innerRef = useForwardRef(ref)
-
-    useClickAway(handleClose, innerRef)
-
+  ({ isOpen, items, onRequestClose }, ref) => {
     return (
       isOpen && (
         <ModalPortal
-          onRequestClose={handleClose}
+          onRequestClose={onRequestClose}
           className={{ overlay: 'bg-transparent' }}
         >
-          <div ref={innerRef} className="absolute">
-            <Menu items={items} handleClose={handleClose} />
+          <div ref={ref} className="absolute">
+            <Menu
+              items={items}
+              onRequestClose={onRequestClose}
+              variant="shrink"
+            />
           </div>
         </ModalPortal>
       )

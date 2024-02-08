@@ -1,33 +1,24 @@
-import { doc, onSnapshot } from 'firebase/firestore'
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { deleteDoc, doc } from 'firebase/firestore'
+import { toast } from 'sonner'
 
 import { db } from '../../firebase'
-import { Lessons } from '../types'
+import { toastError } from '../toast'
 
 const useSchedule = () => {
-  const { scheduleId } = useParams()
+  const deleteSchedule = async (scheduleId: string | null) => {
+    if (!scheduleId) throw Error('Неизвестный идентификатор.')
 
-  const [lessons, setLessons] = useState<Lessons>({})
-  const [isLoading, setIsLoading] = useState(true)
+    try {
+      const docRef = doc(db, 'schedules', scheduleId)
+      await deleteDoc(docRef)
 
-  useEffect(() => {
-    if (!scheduleId) return
+      toast.success('Расписание успешно удалено!')
+    } catch (error) {
+      toastError(error)
+    }
+  }
 
-    const docRef = doc(db, 'schedules', scheduleId)
-    const unsub = onSnapshot(docRef, (docSnapshot) => {
-      if (docSnapshot.exists()) {
-        setLessons(docSnapshot.data())
-      } else {
-        setLessons({})
-      }
-      setIsLoading(false)
-    })
-
-    return () => unsub()
-  }, [])
-
-  return { lessons, isLoading }
+  return { deleteSchedule }
 }
 
 export default useSchedule
