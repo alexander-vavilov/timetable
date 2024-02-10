@@ -15,16 +15,20 @@ export const useUnprocessedFiles = () => {
   const { uploadFile } = useFirebaseStorage()
 
   const storageRef = ref(storage, `schedules/${scheduleId}/${lessonId}`)
-  const processFiles = async (files: File[] | FileList = unprocessedFiles) => {
+  const processFiles = async () => {
     if (!scheduleId || !lessonId) return
 
     try {
-      for (const file of [...files]) {
+      for (const file of unprocessedFiles) {
         const fileRef = ref(storageRef, nanoid())
         const { name, fullPath, url } = await uploadFile(file, fileRef)
 
         await updateDoc(doc(db, 'schedules', scheduleId, 'lessons', lessonId), {
           files: arrayUnion({ name, fullPath, url })
+        })
+
+        setUnprocessedFiles((files) => {
+          return files.filter((currentFile) => currentFile !== file)
         })
       }
 

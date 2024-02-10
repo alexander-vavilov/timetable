@@ -1,4 +1,5 @@
-import { ref } from 'firebase/storage'
+import { arrayRemove, doc, updateDoc } from 'firebase/firestore'
+import { deleteObject, ref } from 'firebase/storage'
 import { FC } from 'react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import {
@@ -6,10 +7,12 @@ import {
   MdOpenInBrowser,
   MdOutlineFileDownload
 } from 'react-icons/md'
+import { useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 
-import { storage } from '../../../firebase'
+import { db, storage } from '../../../firebase'
 import { useContextMenu } from '../../hooks/useContextMenu'
-import { useFirebaseStorage } from '../../hooks/useFirebaseStorage'
+import { toastError } from '../../toast'
 import { MenuItem } from '../../types/menu'
 import { FirebaseFile } from '../../types/storage'
 import { cn } from '../../utils'
@@ -31,8 +34,22 @@ const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
     close: closeContextMenu,
     isOpen: isContextMenuOpen
   } = useContextMenu()
+  const { scheduleId, lessonId } = useParams()
 
-  const { deleteFile } = useFirebaseStorage()
+  const deleteFile = () => {
+    if (!scheduleId || !lessonId) throw Error('Неверный идентификатор.')
+
+    try {
+      deleteObject(ref(storage, file.fullPath))
+      updateDoc(doc(db, 'schedules', scheduleId, 'lessons', lessonId), {
+        files: arrayRemove(file)
+      })
+
+      toast.success('Изображение успешно удалено!')
+    } catch (error) {
+      toastError(error)
+    }
+  }
 
   const menuItems: MenuItem[] = [
     {
@@ -48,7 +65,7 @@ const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
     {
       label: 'Удалить',
       icon: MdDeleteOutline,
-      action: () => deleteFile(ref(storage, file.fullPath)),
+      action: deleteFile,
       warning: {
         name: 'Удалить изображение',
         message: 'Вы уверены, что хотите удалить данное изображение?',
@@ -60,7 +77,11 @@ const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
   return (
     <>
       <div onContextMenu={openContextMenu} className="group relative">
-        <Image src={file.url} onClick={handleOpen} />
+        <Image
+          src={file.url}
+          onClick={handleOpen}
+          className={{ wrapper: 'w-full' }}
+        />
         <button
           onClick={openContextMenu}
           className={cn(

@@ -1,16 +1,19 @@
-import {
-  deleteObject,
-  getDownloadURL,
-  StorageReference,
-  uploadBytes
-} from 'firebase/storage'
-import { toast } from 'sonner'
+import Compressor from 'compressorjs'
+import { getDownloadURL, StorageReference, uploadBytes } from 'firebase/storage'
 
-import { toastError } from '../toast'
 import { FirebaseFile } from '../types/storage'
-import { compressImage } from '../utils'
 
 export const useFirebaseStorage = () => {
+  const compressImage = (file: File): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      new Compressor(file, {
+        quality: 0.6,
+        success: (result) => resolve(result),
+        error: (error) => reject(error)
+      })
+    })
+  }
+
   const uploadFile = async (
     file: File,
     fileRef: StorageReference,
@@ -31,14 +34,5 @@ export const useFirebaseStorage = () => {
     })
   }
 
-  const deleteFile = async (fileRef: StorageReference) => {
-    try {
-      await deleteObject(fileRef)
-      toast.success('Изображение успешно удалено!')
-    } catch (error) {
-      toastError(error)
-    }
-  }
-
-  return { uploadFile, deleteFile }
+  return { uploadFile }
 }

@@ -91,7 +91,7 @@ export const useLesson = (id: string) => {
           await setDoc(docRef, currentLesson)
         }
       }
-      if (unprocessedFiles) await processFiles(unprocessedFiles)
+      if (unprocessedFiles) await processFiles()
 
       toast.success('Изменения успешно сохранены!')
     } catch (error) {
