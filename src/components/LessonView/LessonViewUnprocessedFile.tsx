@@ -16,7 +16,10 @@ const LessonViewUnprocessedFile: FC<LessonViewUnprocessedFileProps> = ({
 
   return (
     <div className="relative max-w-max">
-      <Image src={fileURL} className="h-20 w-20 cursor-default" />
+      <Image
+        src={fileURL}
+        className={{ wrapper: 'h-20 w-20 cursor-default' }}
+      />
       <button
         onClick={handleDelete}
         className="image-button absolute right-0.5 top-0.5 p-0.5"

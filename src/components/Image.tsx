@@ -1,31 +1,39 @@
-import { FC, useState } from 'react'
+import { FC, HTMLAttributes, useState } from 'react'
 
 import { cn } from '../utils'
 import Spinner from './Spinner'
 
-interface ImageProps {
+interface ImageProps
+  extends Omit<HTMLAttributes<HTMLImageElement>, 'className'> {
   src: string
-  onClick?: () => void
-  className?: string
+  className?: {
+    wrapper?: string
+    image?: string
+  }
 }
 
-const Image: FC<ImageProps> = ({ src, onClick, className }) => {
+const Image: FC<ImageProps> = ({ className, ...props }) => {
   const [isLoading, setIsLoading] = useState(true)
 
   return (
     <div
-      className={cn('relative h-32 w-32 overflow-hidden rounded-md', className)}
+      className={cn(
+        'relative h-32 w-32 overflow-hidden rounded-md',
+        className?.wrapper
+      )}
     >
       <img
-        onClick={onClick}
-        src={src}
         onLoad={() => setIsLoading(false)}
-        className="h-full w-full overflow-hidden object-cover object-center"
+        className={cn(
+          'h-full w-full overflow-hidden object-cover object-center',
+          className?.image
+        )}
         draggable={false}
         alt="img"
+        {...props}
       />
       {isLoading && (
-        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-neutral-700">
+        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center bg-gray-300 dark:bg-neutral-700">
           <Spinner />
         </div>
       )}

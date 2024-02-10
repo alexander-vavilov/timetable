@@ -1,9 +1,9 @@
 import { Dispatch, FC, SetStateAction } from 'react'
 
-import { firebaseFile } from '../../types'
+import { FirebaseFile } from '../../types/storage'
 
 interface ImageViewerPreviewListProps {
-  images: firebaseFile[]
+  images: FirebaseFile[]
   setViewedImageIndex: Dispatch<SetStateAction<number | null>>
 }
 

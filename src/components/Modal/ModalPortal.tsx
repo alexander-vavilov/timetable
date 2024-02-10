@@ -24,7 +24,8 @@ const ModalPortal: FC<ModalPortalProps> = ({
 
   useKeyDown((e) => {
     if (e.key === 'Escape') {
-      const lastModal = rootElement?.lastChild
+      // rootElement.lastChild - Element that contains modal with overlay. childNodes[0] - modal without overlay
+      const lastModal = rootElement?.lastChild?.childNodes[0]
       const isLastModal = lastModal === ref.current
 
       isLastModal && onRequestClose()

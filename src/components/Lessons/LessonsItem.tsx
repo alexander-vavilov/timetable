@@ -50,14 +50,14 @@ const LessonsItem: FC<LessonsItemProps> = ({ date, ...props }) => {
       {isEditMode && <LessonsItemDeleteButton onClick={() => deleteLesson()} />}
       <Link
         to={`lesson/${props.id}?date=${date.getTime()}`}
-        className="flex w-full cursor-pointer items-center p-4"
+        className="flex h-16 w-full cursor-pointer items-center p-4"
       >
         <div className="flex flex-col text-xs">
           <span>{props.start}</span>
           <span className="text-neutral-400">{props.end}</span>
         </div>
         <div className="mx-3 h-8 w-0.5 rounded-full bg-black/20 transition-background dark:bg-white" />
-        <div className="flex max-w-[250px] flex-col leading-none">
+        <div className="flex max-w-[250px] flex-col">
           <span className="truncate">{props.name}</span>
           {currentHomework && (
             <TextInfo className="truncate">{currentHomework}</TextInfo>

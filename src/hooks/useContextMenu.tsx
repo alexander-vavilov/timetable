@@ -2,7 +2,7 @@ import { MouseEvent, useEffect, useRef, useState } from 'react'
 
 type clickPositionType = { x: number | null; y: number | null }
 
-const useContextMenu = () => {
+export const useContextMenu = () => {
   const [clickPosition, setClickPosition] = useState<clickPositionType>({
     x: null,
     y: null
@@ -51,5 +51,3 @@ const useContextMenu = () => {
 
   return { isOpen, ref, open, close }
 }
-
-export default useContextMenu

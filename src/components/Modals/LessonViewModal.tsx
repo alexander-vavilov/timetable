@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 
 import { ScheduleContext } from '../../contexts/ScheduleContext'
-import useLesson from '../../hooks/useLesson'
+import { useLesson } from '../LessonView/useLesson'
 import { IScheduleContext } from '../../types/contexts'
 import Button from '../Button'
 import Input from '../Input'
@@ -92,8 +92,8 @@ const LessonViewModal: FC = () => {
               setUnprocessedFiles={formState.setUnprocessedFiles}
             />
           )}
-          {!!formState.existingFiles.length && (
-            <LessonViewAttachments files={formState.existingFiles} />
+          {!!formState.files.length && (
+            <LessonViewAttachments files={formState.files} />
           )}
         </div>
       </Modal.Content>

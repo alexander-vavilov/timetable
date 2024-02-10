@@ -9,7 +9,7 @@ export const menuStyles = (isWarning: boolean) => ({
         isWarning
     }),
     shrink: cn('my-0.5 px-2 py-1 text-sm rounded-[4px]', {
-      'dark:text-white/70 dark:hover:text-white dark:active:text-white dark:peer-hover:text-white hover:bg-green-700/70 active:bg-green-700/60 peer-hover:bg-green-700/70':
+      'dark:text-white/70 dark:hover:text-white dark:active:text-white dark:peer-hover:text-white hover:bg-green-700/70 active:bg-green-700/60 peer-hover:bg-green-700/70 hover:text-white peer-hover:text-white active:text-white':
         !isWarning,
       'text-red-500 hover:bg-red-500/30 active:bg-red-500/40 peer-hover:bg-red-500/30':
         isWarning

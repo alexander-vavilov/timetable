@@ -3,16 +3,17 @@ import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import isEqual from 'lodash.isequal'
 import { useContext, useState } from 'react'
 import { useParams, useSearchParams } from 'react-router-dom'
+import { toast } from 'sonner'
 
-import { db } from '../../firebase'
-import useFiles from '../components/LessonView/useFiles'
-import useTimeCalc from '../components/LessonView/useTimeCalc'
-import { ScheduleContext } from '../contexts/ScheduleContext'
-import { toastError } from '../toast'
-import { Lesson } from '../types'
-import { IScheduleContext } from '../types/contexts'
+import { db } from '../../../firebase'
+import { ScheduleContext } from '../../contexts/ScheduleContext'
+import { toastError } from '../../toast'
+import { Lesson } from '../../types'
+import { IScheduleContext } from '../../types/contexts'
+import { useTimeCalc } from './useTimeCalc'
+import { useUnprocessedFiles } from './useUnprocessedFiles'
 
-const useLesson = (id: string) => {
+export const useLesson = (id: string) => {
   const { scheduleId } = useParams()
 
   const searchParams = useSearchParams()[0]
@@ -32,7 +33,8 @@ const useLesson = (id: string) => {
     weekDay,
     homework: {
       [unixDateTime]: ''
-    }
+    },
+    files: []
   }
 
   const lessonData = { ...defaultLessonData, ...lessons[id] }
@@ -49,8 +51,9 @@ const useLesson = (id: string) => {
     lessonData.homework[unixDateTime] || ''
   )
 
-  const { existingFiles, unprocessedFiles, setUnprocessedFiles, processFiles } =
-    useFiles()
+  const files = lessonData.files
+  const { unprocessedFiles, setUnprocessedFiles, processFiles } =
+    useUnprocessedFiles()
 
   // Lesson object to be saved in the db
   const currentLesson = {
@@ -62,8 +65,9 @@ const useLesson = (id: string) => {
     weekDay,
     homework: {
       ...lessonData?.homework,
-      ...(!!homework?.length && { [unixDateTime]: homework }) // homework length > 0 => this field added to homework object
-    }
+      ...(!!homework?.length && { [unixDateTime]: homework })
+    },
+    files
   }
 
   const isContentChanged = !isEqual(currentLesson, lessonData)
@@ -78,18 +82,20 @@ const useLesson = (id: string) => {
         if (!scheduleId || !id) throw Error('Неизвестный идентификатор.')
         if (!isOwner) throw Error('Вносить изменения может только владелец.')
 
-        const docRef = doc(db, 'schedules', scheduleId)
+        const docRef = doc(db, 'schedules', scheduleId, 'lessons', id)
         const docSnap = await getDoc(docRef)
 
         if (docSnap.exists()) {
-          await updateDoc(docRef, { [id]: currentLesson })
+          await updateDoc(docRef, currentLesson)
         } else {
-          await setDoc(docRef, { [id]: currentLesson })
+          await setDoc(docRef, currentLesson)
         }
       }
-
       if (unprocessedFiles) await processFiles(unprocessedFiles)
+
+      toast.success('Изменения успешно сохранены!')
     } catch (error) {
+      toast.error('Что-то пошло не так в процессе сохранения...')
       toastError(error)
     } finally {
       setIsSavingInProgress(false)
@@ -109,12 +115,10 @@ const useLesson = (id: string) => {
       setTime,
       homework,
       setHomework,
-      existingFiles,
+      files,
       unprocessedFiles,
       setUnprocessedFiles
     },
     functions: { handleSave }
   }
 }
-
-export default useLesson

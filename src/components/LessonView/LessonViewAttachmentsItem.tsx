@@ -8,16 +8,16 @@ import {
 } from 'react-icons/md'
 
 import { storage } from '../../../firebase'
-import useContextMenu from '../../hooks/useContextMenu'
-import useFirebaseStorage from '../../hooks/useFirebaseStorage'
-import { firebaseFile } from '../../types'
+import { useContextMenu } from '../../hooks/useContextMenu'
+import { useFirebaseStorage } from '../../hooks/useFirebaseStorage'
 import { MenuItem } from '../../types/menu'
+import { FirebaseFile } from '../../types/storage'
 import { cn } from '../../utils'
 import ContextMenu from '../ContextMenu'
 import Image from '../Image'
 
 interface LessonViewAttachmentsItemProps {
-  file: firebaseFile
+  file: FirebaseFile
   handleOpen: () => void
 }
 
@@ -64,7 +64,7 @@ const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
         <button
           onClick={openContextMenu}
           className={cn(
-            'image-button absolute right-0.5 top-0.5 p-1',
+            'image-button absolute right-1 top-1 p-[3px]',
             !isContextMenuOpen &&
               'cursor:invisible cursor:opacity-0 cursor:group-hover:visible cursor:group-hover:opacity-100'
           )}

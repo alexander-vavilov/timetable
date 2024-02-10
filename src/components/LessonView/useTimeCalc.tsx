@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import { ScheduleContext } from '../../contexts/ScheduleContext'
 import { IScheduleContext } from '../../types/contexts'
 
-const useTimeCalc = (weekDay: number) => {
+export const useTimeCalc = (weekDay: number) => {
   const { lessons } = useContext(ScheduleContext) as IScheduleContext
 
   try {
@@ -28,5 +28,3 @@ const useTimeCalc = (weekDay: number) => {
     return { start: '08:30', end: '09:15' }
   }
 }
-
-export default useTimeCalc

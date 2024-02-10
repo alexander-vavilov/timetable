@@ -1,11 +1,11 @@
 import { FC, useState } from 'react'
 
-import { firebaseFile } from '../../types'
+import { FirebaseFile } from '../../types/storage'
 import ImageViewer from '../ImageViewer/ImageViewer'
-import TextInfo from '../TextInfo'
+// import TextInfo from '../TextInfo'
 import LessonViewAttachmentsItem from './LessonViewAttachmentsItem'
 
-const LessonViewAttachments: FC<{ files: firebaseFile[] }> = ({ files }) => {
+const LessonViewAttachments: FC<{ files: FirebaseFile[] }> = ({ files }) => {
   const [viewedImageIndex, setViewedImageIndex] = useState<number | null>(null)
 
   return (
@@ -26,10 +26,10 @@ const LessonViewAttachments: FC<{ files: firebaseFile[] }> = ({ files }) => {
           />
         )}
       </div>
-      <TextInfo>
+      {/* <TextInfo>
         Внимание! Файлы автоматически удаляются спустя 7 дней после их
         добавления в целях экономии места на серверном хранилище.
-      </TextInfo>
+      </TextInfo> */}
     </div>
   )
 }

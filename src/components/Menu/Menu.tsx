@@ -4,6 +4,11 @@ import { MenuProps } from '../../types/menu'
 import { cn } from '../../utils'
 import MenuItem from './MenuItem'
 
+const styles = {
+  default: 'rounded-md p-2',
+  shrink: 'w-40 rounded-[4px] p-1'
+}
+
 const Menu: FC<MenuProps> = ({
   items,
   onRequestClose,
@@ -12,11 +17,8 @@ const Menu: FC<MenuProps> = ({
   return (
     <ul
       className={cn(
-        'w- flex flex-col border border-gray-300 bg-gray-200 shadow-lg dark:border-neutral-800 dark:bg-neutral-900',
-        {
-          'rounded-md p-2': variant === 'default',
-          'w-40 rounded-[4px] p-1': variant === 'shrink'
-        }
+        'flex flex-col border border-gray-300 bg-white shadow-lg dark:border-neutral-800 dark:bg-neutral-900',
+        styles[variant]
       )}
     >
       {items.map(({ ...props }) => (

@@ -7,15 +7,16 @@ import {
 } from 'react-icons/md'
 
 import { useKeyDown } from '../../hooks/useKeyDown'
-import { firebaseFile } from '../../types'
+import { FirebaseFile } from '../../types/storage'
 import CloseButton from '../CloseButton'
+import Image from '../Image'
 import ModalPortal from '../Modal/ModalPortal'
 import Spinner from '../Spinner'
 import TextInfo from '../TextInfo'
 import ImageViewerPreviewList from './ImageViewerPreviewList'
 
 interface ImagesViewerProps {
-  images: firebaseFile[]
+  images: FirebaseFile[]
   viewedImageIndex: number
   setViewedImageIndex: Dispatch<SetStateAction<number | null>>
 }

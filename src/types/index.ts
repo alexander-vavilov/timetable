@@ -1,6 +1,8 @@
 import { UserCredential } from 'firebase/auth'
 import { ReactNode } from 'react'
 
+import { FirebaseFile } from './storage'
+
 export interface Lesson {
   name: string
   location?: string
@@ -10,6 +12,7 @@ export interface Lesson {
   homework?: {
     [key: string]: string
   }
+  files: FirebaseFile[]
   weekDay: number
   id: string
 }
@@ -28,10 +31,4 @@ export interface ModalProps {
   children?: ReactNode
   onRequestClose: () => void
   className?: string
-}
-
-export type firebaseFile = {
-  url: string
-  name: string
-  fullPath: string
 }
