@@ -9,9 +9,7 @@ import {
 import { useKeyDown } from '../../hooks/useKeyDown'
 import { FirebaseFile } from '../../types/storage'
 import CloseButton from '../CloseButton'
-import Image from '../Image'
 import ModalPortal from '../Modal/ModalPortal'
-import Spinner from '../Spinner'
 import TextInfo from '../TextInfo'
 import ImageViewerPreviewList from './ImageViewerPreviewList'
 
@@ -27,8 +25,6 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
   setViewedImageIndex
 }) => {
   const ref = useRef<HTMLImageElement>(null)
-
-  const [isLoading, setIsLoading] = useState(true)
 
   const defaultCrop = { x: 0, y: 0, scale: 1, rotate: 0 }
   const [crop, setCrop] = useState(defaultCrop)
@@ -90,15 +86,9 @@ const ImagesViewer: FC<ImagesViewerProps> = ({
         modal: 'max-w-5xl'
       }}
     >
-      {/* {isLoading && (
-        <div className="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2">
-          <Spinner size={30} />
-        </div>
-      )} */}
       <img
         ref={ref}
         src={images[viewedImageIndex].url}
-        onLoad={() => setIsLoading(false)}
         className="relative h-full w-full touch-none"
         draggable={false}
         style={{

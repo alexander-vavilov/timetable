@@ -1,18 +1,28 @@
 import Compressor from 'compressorjs'
+import { CollectionReference, deleteDoc, getDocs } from 'firebase/firestore'
 import { getDownloadURL, StorageReference, uploadBytes } from 'firebase/storage'
 
 import { FirebaseFile } from '../types/storage'
 
-export const useFirebaseStorage = () => {
-  const compressImage = (file: File): Promise<Blob> => {
-    return new Promise((resolve, reject) => {
-      new Compressor(file, {
-        quality: 0.6,
-        success: (result) => resolve(result),
-        error: (error) => reject(error)
-      })
+const compressImage = (file: File): Promise<Blob> => {
+  return new Promise((resolve, reject) => {
+    new Compressor(file, {
+      quality: 0.6,
+      success: (result) => resolve(result),
+      error: (error) => reject(error)
     })
+  })
+}
+
+export const useFirebase = () => {
+  // firestore
+
+  const deleteCollection = async (ref: CollectionReference) => {
+    const collectionSnap = await getDocs(ref)
+    collectionSnap.docs.forEach(async (doc) => await deleteDoc(doc.ref))
   }
+
+  // storage
 
   const uploadFile = async (
     file: File,
@@ -34,5 +44,5 @@ export const useFirebaseStorage = () => {
     })
   }
 
-  return { uploadFile }
+  return { deleteCollection, uploadFile }
 }

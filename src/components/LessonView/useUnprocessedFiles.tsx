@@ -5,14 +5,14 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { db, storage } from '../../../firebase'
-import { useFirebaseStorage } from '../../hooks/useFirebaseStorage'
+import { useFirebase } from '../../hooks/useFirebase'
 import { toastError } from '../../toast'
 
 export const useUnprocessedFiles = () => {
   const [unprocessedFiles, setUnprocessedFiles] = useState<File[]>([])
 
   const { scheduleId, lessonId } = useParams()
-  const { uploadFile } = useFirebaseStorage()
+  const { uploadFile } = useFirebase()
 
   const storageRef = ref(storage, `schedules/${scheduleId}/${lessonId}`)
   const processFiles = async () => {
