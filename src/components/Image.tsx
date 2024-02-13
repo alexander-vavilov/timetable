@@ -18,7 +18,7 @@ const Image: FC<ImageProps> = ({ className, ...props }) => {
   return (
     <div
       className={cn(
-        'relative h-32 w-32 overflow-hidden rounded-md',
+        'relative h-32 w-32 select-none overflow-hidden rounded-md',
         className?.wrapper
       )}
     >
