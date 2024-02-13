@@ -45,7 +45,7 @@ export const ScheduleContextProvider: FC<{ children: ReactNode }> = ({
     })
 
     return () => unsub()
-  }, [])
+  }, [scheduleId])
 
   const value = {
     lessons,

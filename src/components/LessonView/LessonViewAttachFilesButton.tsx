@@ -16,7 +16,7 @@ const LessonViewAttachFilesButton: FC<LessonViewAttachFilesButtonProps> = ({
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col py-4">
       <input
         type="file"
         id="file"

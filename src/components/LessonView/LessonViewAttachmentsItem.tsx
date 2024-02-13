@@ -83,6 +83,7 @@ const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
           className={{ wrapper: 'w-full' }}
         />
         <button
+          tabIndex={-1}
           onClick={openContextMenu}
           className={cn(
             'image-button absolute right-1 top-1 p-[3px]',

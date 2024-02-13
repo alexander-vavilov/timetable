@@ -7,7 +7,6 @@ import { toast } from 'sonner'
 
 import { db } from '../../../firebase'
 import { ScheduleContext } from '../../contexts/ScheduleContext'
-import { toastError } from '../../toast'
 import { Lesson } from '../../types'
 import { IScheduleContext } from '../../types/contexts'
 import { useTimeCalc } from './useTimeCalc'
@@ -96,7 +95,6 @@ export const useLesson = (id: string) => {
       toast.success('Изменения успешно сохранены!')
     } catch (error) {
       toast.error('Что-то пошло не так в процессе сохранения...')
-      toastError(error)
     } finally {
       setIsSavingInProgress(false)
     }
