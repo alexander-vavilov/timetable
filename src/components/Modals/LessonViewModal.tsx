@@ -51,7 +51,6 @@ const LessonViewModal: FC = () => {
             e.preventDefault()
             !isSavingInProgress && handleSave()
           }}
-          className="pb-4"
         >
           <Input
             type="text"
@@ -93,22 +92,20 @@ const LessonViewModal: FC = () => {
           </div>
           <input type="submit" hidden />
         </form>
-        <div className="flex flex-col gap-4">
-          {isOwner && (
-            <LessonViewAttachFilesButton
-              setUnprocessedFiles={formState.setUnprocessedFiles}
-            />
-          )}
-          {!!formState.unprocessedFiles.length && (
-            <LessonViewUnprocessedFiles
-              files={formState.unprocessedFiles}
-              setUnprocessedFiles={formState.setUnprocessedFiles}
-            />
-          )}
-          {!!formState.files.length && (
-            <LessonViewAttachments files={formState.files} />
-          )}
-        </div>
+        {isOwner && (
+          <LessonViewAttachFilesButton
+            setUnprocessedFiles={formState.setUnprocessedFiles}
+          />
+        )}
+        {!!formState.unprocessedFiles.length && (
+          <LessonViewUnprocessedFiles
+            files={formState.unprocessedFiles}
+            setUnprocessedFiles={formState.setUnprocessedFiles}
+          />
+        )}
+        {!!formState.files.length && (
+          <LessonViewAttachments files={formState.files} />
+        )}
       </Modal.Content>
       {isOwner && isUnprocessed && (
         <Modal.Footer className="justify-end">

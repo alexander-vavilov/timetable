@@ -9,7 +9,7 @@ const LessonViewAttachments: FC<{ files: FirebaseFile[] }> = ({ files }) => {
   const [viewedImageIndex, setViewedImageIndex] = useState<number | null>(null)
 
   return (
-    <div className="flex flex-col border-t border-gray-200 pt-4 dark:border-neutral-500">
+    <div className="mt-4 flex flex-col border-t border-gray-200 pt-4 dark:border-neutral-500">
       <div className="grid grid-cols-[repeat(auto-fill,_minmax(128px,_1fr))] gap-2">
         {files.map((file, index) => (
           <LessonViewAttachmentsItem
