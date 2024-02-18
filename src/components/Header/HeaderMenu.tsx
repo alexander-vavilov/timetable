@@ -15,13 +15,13 @@ import { auth } from '../../../firebase'
 import { ScheduleContext } from '../../contexts/ScheduleContext'
 import { ThemeContext } from '../../contexts/ThemeContext'
 import { useKeyDown } from '../../hooks/useKeyDown'
-import { useSchedule } from '../Schedule/useSchedule'
 import { IScheduleContext, IThemeContext } from '../../types/contexts'
 import { MenuItem } from '../../types/menu'
 import { cn } from '../../utils'
 import Menu from '../Menu/Menu'
 import MenuButton from '../Menu/MenuButton'
 import Overlay from '../Overlay'
+import { useSchedule } from '../Schedule/useSchedule'
 
 const HeaderMenu: FC = () => {
   const { theme, switchTheme } = useContext(ThemeContext) as IThemeContext

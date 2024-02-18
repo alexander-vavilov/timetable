@@ -42,7 +42,7 @@ const LessonViewModal: FC = () => {
     <Modal
       onRequestClose={handleCloseModal}
       name="Детали"
-      className="max-h-[48%]"
+      className="h-full max-h-full rounded-none md:max-h-[48%] md:rounded-md"
     >
       <form
         className="flex flex-auto flex-col overflow-y-auto"
