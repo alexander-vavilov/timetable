@@ -1,14 +1,13 @@
-import { deleteField, doc, updateDoc } from 'firebase/firestore'
+import { deleteDoc, doc } from 'firebase/firestore'
 import { deleteObject, listAll, ref } from 'firebase/storage'
 import { FC, useContext } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 
 import { db, storage } from '../../../firebase'
 import { ScheduleContext } from '../../contexts/ScheduleContext'
-import { UserContext } from '../../contexts/UserContext'
-import { toastError } from '../../toast'
 import { Lesson } from '../../types'
-import { IScheduleContext, IUserContext } from '../../types/contexts'
+import { IScheduleContext } from '../../types/contexts'
 import TextInfo from '../TextInfo'
 import LessonsItemDeleteButton from './LessonsItemDeleteButton'
 
@@ -18,17 +17,16 @@ interface LessonsItemProps extends Lesson {
 }
 
 const LessonsItem: FC<LessonsItemProps> = ({ date, ...props }) => {
-  const { currentUser } = useContext(UserContext) as IUserContext
   const { isEditMode } = useContext(ScheduleContext) as IScheduleContext
 
   const { scheduleId } = useParams()
 
   const deleteLesson = async () => {
-    if (!currentUser || !scheduleId) return
+    if (!scheduleId) throw Error('Неверный идентификатор.')
 
     try {
-      const docRef = doc(db, 'schedules', scheduleId)
-      await updateDoc(docRef, { [props.id]: deleteField() })
+      const docRef = doc(db, 'schedules', scheduleId, 'lessons', props.id)
+      await deleteDoc(docRef)
 
       const listRef = ref(storage, `schedules/${scheduleId}/${props.id}`)
       const listResult = await listAll(listRef)
@@ -39,7 +37,7 @@ const LessonsItem: FC<LessonsItemProps> = ({ date, ...props }) => {
         })
       }
     } catch (error) {
-      toastError(error)
+      toast.error('Что-то пошло не так в процессе удаления...')
     }
   }
 

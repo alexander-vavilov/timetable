@@ -17,9 +17,9 @@ import WarningModal from './WarningModal'
 const LessonViewModal: FC = () => {
   const { lessonId, scheduleId } = useParams()
   const {
-    state: { isUnprocessed, isSavingInProgress },
+    status: { isUnprocessed, isSavingInProgress },
     functions: { handleSave },
-    formState
+    state
   } = useLesson(lessonId as string)
 
   const [isWarningOpen, setIsWarningOpen] = useState(false)
@@ -30,13 +30,12 @@ const LessonViewModal: FC = () => {
   const closeModal = () => navigate(`/schedule/${scheduleId}`)
 
   const handleCloseModal = () => {
-    const toastMessage =
-      'Дождитесь окончания сохранения. Это может занять некоторое время.'
-
-    if (isSavingInProgress) return toast.info(toastMessage)
-    if (isUnprocessed) return setIsWarningOpen(true)
-
-    closeModal()
+    if (isSavingInProgress)
+      toast.info(
+        'Дождитесь окончания сохранения. Это может занять некоторое время.'
+      )
+    else if (isUnprocessed) setIsWarningOpen(true)
+    else closeModal()
   }
 
   return (
@@ -45,79 +44,76 @@ const LessonViewModal: FC = () => {
       name="Детали"
       className="max-h-[48%]"
     >
-      <Modal.Content className="pt-6">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            !isSavingInProgress && handleSave()
-          }}
-        >
+      <form
+        className="flex flex-auto flex-col overflow-y-auto"
+        onSubmit={(e) => {
+          e.preventDefault()
+          !isSavingInProgress && handleSave()
+        }}
+      >
+        <Modal.Content className="flex-auto pt-6">
           <Input
             type="text"
+            required
             editable={isOwner}
             styleVariant="flushed"
-            value={formState.name}
-            onChange={(e) => formState.setName(e.target.value)}
+            value={state.name}
+            onChange={(e) => state.setName(e.target.value)}
             className="text-3xl"
             placeholder="предмет"
-            autoFocus={!formState.name.length}
+            autoFocus={!state.name.length}
           />
           <div className="flex flex-col gap-4 pt-10">
             <Input
               type="text"
               editable={isOwner}
-              value={formState.teacher}
-              onChange={(e) => formState.setTeacher(e.target.value)}
+              value={state.teacher}
+              onChange={(e) => state.setTeacher(e.target.value)}
               placeholder="учитель"
             />
             <Input
               type="text"
               editable={isOwner}
-              value={formState.location}
-              onChange={(e) => formState.setLocation(e.target.value)}
+              value={state.location}
+              onChange={(e) => state.setLocation(e.target.value)}
               placeholder="кабинет"
             />
             <LessonViewTimeInputs
-              time={formState.time}
-              setTime={formState.setTime}
+              time={state.time}
+              setTime={state.setTime}
               editable={isOwner}
             />
             <Input
               type="text"
               editable={isOwner}
-              value={formState.homework}
-              onChange={(e) => formState.setHomework(e.target.value)}
-              placeholder="Домашнее задание"
+              value={state.homework}
+              onChange={(e) => state.setHomework(e.target.value)}
+              placeholder="домашнее задание"
             />
           </div>
-          <input type="submit" hidden />
-        </form>
-        {isOwner && (
-          <LessonViewAttachFilesButton
-            setUnprocessedFiles={formState.setUnprocessedFiles}
-          />
+          {isOwner && (
+            <LessonViewAttachFilesButton
+              setUnprocessedFiles={state.setUnprocessedFiles}
+            />
+          )}
+          {!!state.unprocessedFiles.length && (
+            <LessonViewUnprocessedFiles
+              files={state.unprocessedFiles}
+              setUnprocessedFiles={state.setUnprocessedFiles}
+            />
+          )}
+          {!!state.files.length && (
+            <LessonViewAttachments files={state.files} />
+          )}
+        </Modal.Content>
+        {isOwner && isUnprocessed && (
+          <Modal.Footer className="justify-end">
+            <Button type="submit" isLoading={isSavingInProgress}>
+              Сохранить
+            </Button>
+          </Modal.Footer>
         )}
-        {!!formState.unprocessedFiles.length && (
-          <LessonViewUnprocessedFiles
-            files={formState.unprocessedFiles}
-            setUnprocessedFiles={formState.setUnprocessedFiles}
-          />
-        )}
-        {!!formState.files.length && (
-          <LessonViewAttachments files={formState.files} />
-        )}
-      </Modal.Content>
-      {isOwner && isUnprocessed && (
-        <Modal.Footer className="justify-end">
-          <Button
-            type="submit"
-            onClick={handleSave}
-            isLoading={isSavingInProgress}
-          >
-            Сохранить
-          </Button>
-        </Modal.Footer>
-      )}
+      </form>
       {isWarningOpen && (
         <WarningModal
           onRequestClose={() => setIsWarningOpen(false)}

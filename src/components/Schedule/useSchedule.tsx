@@ -3,7 +3,6 @@ import { toast } from 'sonner'
 
 import { db } from '../../../firebase'
 import { useFirebase } from '../../hooks/useFirebase'
-import { toastError } from '../../toast'
 
 export const useSchedule = () => {
   const { deleteCollection } = useFirebase()
@@ -19,7 +18,7 @@ export const useSchedule = () => {
 
       toast.success('Расписание успешно удалено!')
     } catch (error) {
-      toastError(error)
+      toast.error('Что-то пошло не так в процессе удаления расписания...')
     }
   }
 

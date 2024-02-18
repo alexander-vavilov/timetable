@@ -101,8 +101,8 @@ export const useLesson = (id: string) => {
   }
 
   return {
-    state: { isUnprocessed, isSavingInProgress },
-    formState: {
+    status: { isUnprocessed, isSavingInProgress },
+    state: {
       name,
       setName,
       teacher,

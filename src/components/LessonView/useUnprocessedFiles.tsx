@@ -29,8 +29,6 @@ export const useUnprocessedFiles = () => {
         return files.filter((currentFile) => currentFile !== file)
       })
     }
-
-    setUnprocessedFiles([])
   }
 
   return {

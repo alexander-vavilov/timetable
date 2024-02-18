@@ -12,7 +12,6 @@ import { toast } from 'sonner'
 
 import { db, storage } from '../../../firebase'
 import { useContextMenu } from '../../hooks/useContextMenu'
-import { toastError } from '../../toast'
 import { MenuItem } from '../../types/menu'
 import { FirebaseFile } from '../../types/storage'
 import { cn } from '../../utils'
@@ -47,7 +46,7 @@ const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
 
       toast.success('Изображение успешно удалено!')
     } catch (error) {
-      toastError(error)
+      toast.error('Что-то пошло не так в процессе удаления изображения...')
     }
   }
 
@@ -83,12 +82,15 @@ const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
           className={{ wrapper: 'w-full' }}
         />
         <button
+          type="button"
           tabIndex={-1}
-          onClick={openContextMenu}
+          onClick={(e) => {
+            console.log('button')
+            openContextMenu(e)
+          }}
           className={cn(
             'image-button absolute right-1 top-1 p-[3px]',
-            !isContextMenuOpen &&
-              'cursor:invisible cursor:opacity-0 cursor:group-hover:visible cursor:group-hover:opacity-100'
+            !isContextMenuOpen && 'cursor:hidden cursor:group-hover:block'
           )}
         >
           <BsThreeDotsVertical size={18} />
