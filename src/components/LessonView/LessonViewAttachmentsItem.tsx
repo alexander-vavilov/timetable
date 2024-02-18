@@ -84,10 +84,7 @@ const LessonViewAttachmentsItem: FC<LessonViewAttachmentsItemProps> = ({
         <button
           type="button"
           tabIndex={-1}
-          onClick={(e) => {
-            console.log('button')
-            openContextMenu(e)
-          }}
+          onClick={openContextMenu}
           className={cn(
             'image-button absolute right-1 top-1 p-[3px]',
             !isContextMenuOpen && 'cursor:hidden cursor:group-hover:block'
